@@ -1,0 +1,77 @@
+.newsletterSection {
+    background-color: #FA9BCA;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    width: 100%;
+  }
+  
+  .imageLeft,
+  .imageRight {
+    width: 20%;
+  }
+  
+  .imageLeft img,
+  .imageRight img {
+    max-width: 100%;
+  }
+  
+  .newsletter {
+    text-align: center;
+    width: 60%;
+  }
+  
+  .newsletter h2 {
+    font-size: 2rem;
+    color: #0e0e0e;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .newsletter p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .emailInput {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 300px;
+    margin-right: 10px;
+  }
+  
+  .subscribeButton {
+    background-color: #fc48a2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+  }
+  
+  .subscribeButton:hover {
+    background-color: #ff0080;
+  }
+  

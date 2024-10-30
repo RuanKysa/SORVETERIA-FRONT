@@ -1,16 +1,15 @@
-// pages/index.js
-import Header from '../components/Header';
-import ProductCatalog from '../components/ProductCard';
+import Layout from "@/layout/layout";
+import Email from "@/components/email"
+import Benefits from "@/components/Benefits";
 
-const Home = () => {
+export default function Home() {
   return (
-    <div>
-      <Header />
-      <main>
-        <h1>Bem-vindo à Sorveteria</h1>
-      </main>
-    </div>
-  );
-};
+    <Layout>
+      <div className="home-page">
 
-export default Home;
+      </div>
+      <Benefits />
+      <Email />
+    </Layout>
+  )
+}

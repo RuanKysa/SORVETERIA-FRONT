@@ -1,6 +1,6 @@
-// components/ProductCatalog.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import styles from "../styles/ProductCart.module.css"
 
 const ProductCatalog = () => {
     const [products, setProducts] = useState([]);
@@ -26,15 +26,17 @@ const ProductCatalog = () => {
     if (error) return <div>{error}</div>;
 
     return (
-        <div>
+        <div className={styles.container}>
             <h1>Catálogo de Produtos</h1>
             <ul>
                 {products.map((product) => (
                     <li key={product._id}>
-                        <h2>{product.name}</h2>
-                        <p>{product.description}</p>
-                        <p>Preço: R${product.price.toFixed(2)}</p>
-                        <img src={product.image} alt={product.name} style={{ width: '100px' }} />
+                        <img src={product.image} alt={product.name} />
+                        <div>
+                            <h2>{product.name}</h2>
+                            <p>{product.description}</p>
+                            <p>Preço: R${product.price.toFixed(2)}</p>
+                        </div>
                     </li>
                 ))}
             </ul>
