@@ -27,19 +27,17 @@ const ProductCatalog = () => {
 
     return (
         <div className={styles.container}>
-            <h1>Catálogo de Produtos</h1>
-            <ul>
+            <h1 className={styles.title}>Catálogo de Produtos</h1>
+            <div className={styles.grid}>
                 {products.map((product) => (
-                    <li key={product._id}>
-                        <img src={product.image} alt={product.name} />
-                        <div>
-                            <h2>{product.name}</h2>
-                            <p>{product.description}</p>
-                            <p>Preço: R${product.price.toFixed(2)}</p>
-                        </div>
-                    </li>
+                    <div key={product._id} className={styles.card}>
+                        <img src={product.image} alt={product.name} className={styles.image} />
+                        <h2 className={styles.productName}>{product.name}</h2>
+                        <p className={styles.description}>{product.description}</p>
+                        <p className={styles.price}>Preço: R${product.price.toFixed(2)}</p>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 };
