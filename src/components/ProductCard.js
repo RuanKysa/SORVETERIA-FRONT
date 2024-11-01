@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import styles from "../styles/ProductCart.module.css"
+import styles from "../styles/ProductCart.module.css";
 
 const ProductCatalog = () => {
     const [products, setProducts] = useState([]);
@@ -22,6 +22,11 @@ const ProductCatalog = () => {
         fetchProducts();
     }, []);
 
+    const addToCart = (product) => {
+        // Aqui, você pode implementar a lógica para adicionar o produto ao carrinho.
+        console.log(`Produto adicionado ao carrinho: ${product.name}`);
+    };
+
     if (loading) return <div>Carregando...</div>;
     if (error) return <div>{error}</div>;
 
@@ -31,10 +36,20 @@ const ProductCatalog = () => {
             <div className={styles.grid}>
                 {products.map((product) => (
                     <div key={product._id} className={styles.card}>
-                        <img src={product.image} alt={product.name} className={styles.image} />
+                        <img 
+                            src={`http://localhost:5000${product.image}`} 
+                            alt={product.name} 
+                            className={styles.image} 
+                        />
                         <h2 className={styles.productName}>{product.name}</h2>
                         <p className={styles.description}>{product.description}</p>
                         <p className={styles.price}>Preço: R${product.price.toFixed(2)}</p>
+                        <button 
+                            className={styles.addButton} 
+                            onClick={() => addToCart(product)}
+                        >
+                            Adicionar ao Carrinho
+                        </button>
                     </div>
                 ))}
             </div>

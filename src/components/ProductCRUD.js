@@ -1,13 +1,12 @@
-// components/ProductList.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import styles from '@/styles/ProductCRUD.module.css'; // Importando o CSS
+import styles from '@/styles/ProductCRUD.module.css';
 
 const ProductCRUD = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [formData, setFormData] = useState({ name: '', price: '', description: '' });
+    const [formData, setFormData] = useState({ name: '', price: '', description: '', image: null });
     const [editingProductId, setEditingProductId] = useState(null);
 
     useEffect(() => {
@@ -16,7 +15,7 @@ const ProductCRUD = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/products'); // Ajuste a URL conforme necessário
+            const response = await axios.get('http://localhost:5000/api/products');
             setProducts(response.data);
         } catch (err) {
             setError('Erro ao buscar produtos.');
@@ -30,19 +29,32 @@ const ProductCRUD = () => {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
+    const handleImageChange = (e) => {
+        setFormData((prevData) => ({ ...prevData, image: e.target.files[0] }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const data = new FormData();
+        data.append('name', formData.name);
+        data.append('price', formData.price);
+        data.append('description', formData.description);
+        if (formData.image) data.append('image', formData.image);
+
         try {
             if (editingProductId) {
-                const updatedProduct = await axios.put(`http://localhost:5000/api/products/${editingProductId}`, formData); // Atualiza o produto
-                setProducts(products.map(product => 
-                    product._id === editingProductId ? updatedProduct.data : product
-                ));
+                await axios.put(`http://localhost:5000/api/products/${editingProductId}`, data, {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                });
+                fetchProducts();
             } else {
-                const newProduct = await axios.post('http://localhost:5000/api/products', formData); // Adiciona um novo produto
-                setProducts([...products, newProduct.data]); // Adiciona o novo produto à lista
+                const response = await axios.post('http://localhost:5000/api/products', data, {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                });
+                setProducts([...products, response.data]);
             }
-            setFormData({ name: '', price: '', description: '' });
+            setFormData({ name: '', price: '', description: '', image: null });
             setEditingProductId(null);
         } catch (err) {
             setError('Erro ao salvar produto.');
@@ -54,6 +66,7 @@ const ProductCRUD = () => {
             name: product.name,
             price: product.price,
             description: product.description,
+            image: null,
         });
         setEditingProductId(product._id);
     };
@@ -62,7 +75,7 @@ const ProductCRUD = () => {
         if (window.confirm('Você realmente deseja deletar este produto?')) {
             try {
                 await axios.delete(`http://localhost:5000/api/products/${id}`);
-                setProducts(products.filter(product => product._id !== id)); // Remove o produto da lista local
+                setProducts(products.filter(product => product._id !== id));
             } catch (err) {
                 setError('Erro ao deletar produto.');
             }
@@ -103,7 +116,16 @@ const ProductCRUD = () => {
                     placeholder="Descrição"
                     required
                 />
-                <button type="submit" className={styles.button}>{editingProductId ? 'Editar Produto' : 'Adicionar Produto'}</button>
+                <input
+                    type="file"
+                    name="image"
+                    className={styles.input}
+                    onChange={handleImageChange}
+                    accept="image/*"
+                />
+                <button type="submit" className={styles.button}>
+                    {editingProductId ? 'Editar Produto' : 'Adicionar Produto'}
+                </button>
             </form>
 
             <ul className={styles.ul}>
@@ -113,6 +135,13 @@ const ProductCRUD = () => {
                             <h3>{product.name}</h3>
                             <p>Preço: R${product.price}</p>
                             <p>{product.description}</p>
+                            {product.image && (
+                                <img
+                                    src={`http://localhost:5000${product.image}`}
+                                    alt={product.name}
+                                    className={styles.image}
+                                />
+                            )}
                         </div>
                         <div className={styles.productActions}>
                             <button className={styles.button} onClick={() => handleEdit(product)}>Editar</button>

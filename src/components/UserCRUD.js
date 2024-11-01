@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import styles from '@/styles/UserCRUD.module.css'; 
+import styles from '@/styles/UserCRUD.module.css';
 
 const UserCRUD = () => {
     const [users, setUsers] = useState([]);
@@ -15,7 +15,7 @@ const UserCRUD = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/users'); 
+            const response = await axios.get('http://localhost:5000/api/users');
             setUsers(response.data);
         } catch (err) {
             setError('Erro ao buscar usuários.');
@@ -34,12 +34,10 @@ const UserCRUD = () => {
         try {
             if (editingUserId) {
                 const updatedUser = await axios.put(`http://localhost:5000/api/users/${editingUserId}`, formData);
-                setUsers(users.map(user => 
-                    user._id === editingUserId ? updatedUser.data : user
-                ));
+                setUsers(users.map(user => user._id === editingUserId ? updatedUser.data : user));
             } else {
-                const newUser = await axios.post('http://localhost:5000/api/users', formData); 
-                setUsers([...users, newUser.data]);
+                const newUser = await axios.post('http://localhost:5000/api/users/register', formData);
+                setUsers([...users, { ...newUser.data.user, password: undefined }]);
             }
             setFormData({ name: '', email: '', password: '' });
             setEditingUserId(null);
@@ -52,7 +50,7 @@ const UserCRUD = () => {
         setFormData({
             name: user.name,
             email: user.email,
-            password: '', 
+            password: '',
         });
         setEditingUserId(user._id);
     };
@@ -61,14 +59,14 @@ const UserCRUD = () => {
         if (window.confirm('Você realmente deseja deletar este usuário?')) {
             try {
                 await axios.delete(`http://localhost:5000/api/users/${id}`);
-                setUsers(users.filter(user => user._id !== id)); 
+                setUsers(users.filter(user => user._id !== id));
             } catch (err) {
                 setError('Erro ao deletar usuário.');
             }
         }
     };
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <p>Carregando...</p>;
     if (error) return <p>{error}</p>;
 
     return (
@@ -101,7 +99,7 @@ const UserCRUD = () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Senha"
-                    required={editingUserId === null}
+                    required={!editingUserId}
                 />
                 <button type="submit" className={styles.button}>
                     {editingUserId ? 'Editar Usuário' : 'Adicionar Usuário'}
