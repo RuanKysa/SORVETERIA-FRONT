@@ -6,7 +6,6 @@ export default function catalogo() {
         <Layout>
             <div>
                 <main>
-                    <h1>CATALOGO</h1>
                     <ProductCatalog />
                 </main>
             </div>

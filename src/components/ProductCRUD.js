@@ -6,7 +6,13 @@ const ProductCRUD = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [formData, setFormData] = useState({ name: '', price: '', description: '', image: null });
+    const [formData, setFormData] = useState({ 
+        name: '', 
+        price: '', 
+        description: '', 
+        image: null, 
+        category: '' // Adicionado campo de categoria
+    });
     const [editingProductId, setEditingProductId] = useState(null);
 
     useEffect(() => {
@@ -40,6 +46,7 @@ const ProductCRUD = () => {
         data.append('name', formData.name);
         data.append('price', formData.price);
         data.append('description', formData.description);
+        data.append('category', formData.category); // Inclui a categoria ao enviar os dados
         if (formData.image) data.append('image', formData.image);
 
         try {
@@ -54,7 +61,7 @@ const ProductCRUD = () => {
                 });
                 setProducts([...products, response.data]);
             }
-            setFormData({ name: '', price: '', description: '', image: null });
+            setFormData({ name: '', price: '', description: '', image: null, category: '' });
             setEditingProductId(null);
         } catch (err) {
             setError('Erro ao salvar produto.');
@@ -67,6 +74,7 @@ const ProductCRUD = () => {
             price: product.price,
             description: product.description,
             image: null,
+            category: product.category // Preenche o campo de categoria ao editar
         });
         setEditingProductId(product._id);
     };
@@ -116,6 +124,20 @@ const ProductCRUD = () => {
                     placeholder="Descrição"
                     required
                 />
+                <select
+                    name="category"
+                    className={styles.select}
+                    value={formData.category}
+                    onChange={handleChange}
+                    required
+                >
+                    <option value="">Selecione uma Categoria</option>
+                    <option value="PICOLES DE FRUTA">PICOLES DE FRUTA</option>
+                    <option value="PICOLES DE CREME">PICOLES DE CREME</option>
+                    <option value="BOLOS DE SORVETE">BOLOS DE SORVETE</option>
+                    <option value="POTES">POTES (1L, 2L, 5L, 10L)</option>
+                    <option value="POTINHOS">POTINHOS (300ml, 500ml, 750ml)</option>
+                </select>
                 <input
                     type="file"
                     name="image"
@@ -134,6 +156,7 @@ const ProductCRUD = () => {
                         <div className={styles.productInfo}>
                             <h3>{product.name}</h3>
                             <p>Preço: R${product.price}</p>
+                            <p>Categoria: {product.category}</p>
                             <p>{product.description}</p>
                             {product.image && (
                                 <img
