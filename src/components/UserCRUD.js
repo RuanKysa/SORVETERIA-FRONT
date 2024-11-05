@@ -6,8 +6,24 @@ const UserCRUD = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        cpf: '',
+        address: {
+            street: '',
+            number: '',
+            city: '',
+            state: '',
+            zipCode: '',
+            complement: '',
+            neighborhood: '',
+        },
+        phone: ''
+    });
     const [editingUserId, setEditingUserId] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         fetchUsers();
@@ -26,7 +42,18 @@ const UserCRUD = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
+        if (name.includes('address')) {
+            const [field, subField] = name.split('.');
+            setFormData((prevData) => ({
+                ...prevData,
+                [field]: {
+                    ...prevData[field],
+                    [subField]: value,
+                }
+            }));
+        } else {
+            setFormData((prevData) => ({ ...prevData, [name]: value }));
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -39,8 +66,7 @@ const UserCRUD = () => {
                 const newUser = await axios.post('http://localhost:5000/api/users/register', formData);
                 setUsers([...users, { ...newUser.data.user, password: undefined }]);
             }
-            setFormData({ name: '', email: '', password: '' });
-            setEditingUserId(null);
+            closeModal();
         } catch (err) {
             setError('Erro ao salvar usuário.');
         }
@@ -51,8 +77,12 @@ const UserCRUD = () => {
             name: user.name,
             email: user.email,
             password: '',
+            cpf: user.cpf,
+            address: user.address,
+            phone: user.phone,
         });
         setEditingUserId(user._id);
+        setIsModalOpen(true);
     };
 
     const handleDelete = async (id) => {
@@ -66,45 +96,57 @@ const UserCRUD = () => {
         }
     };
 
+    const openModal = () => {
+        setEditingUserId(null);
+        setFormData({
+            name: '',
+            email: '',
+            password: '',
+            cpf: '',
+            address: {
+                street: '',
+                number: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                complement: '',
+                neighborhood: '',
+            },
+            phone: ''
+        });
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setEditingUserId(null);
+        setFormData({
+            name: '',
+            email: '',
+            password: '',
+            cpf: '',
+            address: {
+                street: '',
+                number: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                complement: '',
+                neighborhood: '',
+            },
+            phone: ''
+        });
+    };
+
     if (loading) return <p>Carregando...</p>;
     if (error) return <p>{error}</p>;
 
     return (
         <div className={styles.container}>
             <h2 className={styles.title}>Lista de Usuários</h2>
-
-            <form className={styles.form} onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="name"
-                    className={styles.input}
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Nome do Usuário"
-                    required
-                />
-                <input
-                    type="email"
-                    name="email"
-                    className={styles.input}
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="Email"
-                    required
-                />
-                <input
-                    type="password"
-                    name="password"
-                    className={styles.input}
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Senha"
-                    required={!editingUserId}
-                />
-                <button type="submit" className={styles.button}>
-                    {editingUserId ? 'Editar Usuário' : 'Adicionar Usuário'}
-                </button>
-            </form>
+            <div className={styles.addButton} onClick={openModal}>
+                <i className="fas fa-plus" /> Adicionar Usuário
+            </div>
 
             <ul className={styles.ul}>
                 {users.map(user => (
@@ -120,6 +162,127 @@ const UserCRUD = () => {
                     </li>
                 ))}
             </ul>
+
+            {isModalOpen && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <span className={styles.close} onClick={closeModal}>&times;</span>
+                        <h3>{editingUserId ? 'Editar Usuário' : 'Adicionar Usuário'}</h3>
+                        <form className={styles.form} onSubmit={handleSubmit}>
+                            <input
+                                type="text"
+                                name="name"
+                                className={styles.input}
+                                value={formData.name}
+                                onChange={handleChange}
+                                placeholder="Nome do Usuário"
+                                required
+                            />
+                            <input
+                                type="email"
+                                name="email"
+                                className={styles.input}
+                                value={formData.email}
+                                onChange={handleChange}
+                                placeholder="Email"
+                                required
+                            />
+                            <input
+                                type="password"
+                                name="password"
+                                className={styles.input}
+                                value={formData.password}
+                                onChange={handleChange}
+                                placeholder="Senha"
+                                required={!editingUserId}
+                            />
+                            <input
+                                type="text"
+                                name="cpf"
+                                className={styles.input}
+                                value={formData.cpf}
+                                onChange={handleChange}
+                                placeholder="CPF"
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="address.street"
+                                className={styles.input}
+                                value={formData.address.street}
+                                onChange={handleChange}
+                                placeholder="Rua"
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="address.number"
+                                className={styles.input}
+                                value={formData.address.number}
+                                onChange={handleChange}
+                                placeholder="Número"
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="address.city"
+                                className={styles.input}
+                                value={formData.address.city}
+                                onChange={handleChange}
+                                placeholder="Cidade"
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="address.state"
+                                className={styles.input}
+                                value={formData.address.state}
+                                onChange={handleChange}
+                                placeholder="Estado"
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="address.zipCode"
+                                className={styles.input}
+                                value={formData.address.zipCode}
+                                onChange={handleChange}
+                                placeholder="CEP"
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="address.complement"
+                                className={styles.input}
+                                value={formData.address.complement}
+                                onChange={handleChange}
+                                placeholder="Complemento"
+                            />
+                            <input
+                                type="text"
+                                name="address.neighborhood"
+                                className={styles.input}
+                                value={formData.address.neighborhood}
+                                onChange={handleChange}
+                                placeholder="Bairro"
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="phone"
+                                className={styles.input}
+                                value={formData.phone}
+                                onChange={handleChange}
+                                placeholder="Telefone"
+                                required
+                            />
+                            <button type="submit" className={styles.button}>
+                                {editingUserId ? 'Editar Usuário' : 'Adicionar Usuário'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -5,14 +5,13 @@ import { useRouter } from 'next/router';
 import Layout from '@/layout/layout';
 
 const Auth = () => {
-  const [formType, setFormType] = useState('login'); // 'login' ou 'register'
+  const [formType, setFormType] = useState('login'); 
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Campos de registro
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
   const [phone, setPhone] = useState('');

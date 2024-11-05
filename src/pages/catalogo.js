@@ -5,9 +5,7 @@ export default function catalogo() {
     return (
         <Layout>
             <div>
-                <main>
-                    <ProductCatalog />
-                </main>
+                <ProductCatalog />
             </div>
         </Layout>
     )
