@@ -5,9 +5,7 @@ import styles from "../styles/ProductCart.module.css";
 const categories = [
     "PICOLES DE FRUTA",
     "PICOLES DE CREME",
-    "BOLOS DE SORVETE",
     "POTES",
-    "POTINHOS",
     "Todos"
 ];
 
@@ -16,6 +14,7 @@ const ProductCatalog = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("Todos");
+    const [modalProduct, setModalProduct] = useState(null); // Novo estado para controlar o produto no modal
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -36,8 +35,16 @@ const ProductCatalog = () => {
         console.log(`Produto adicionado ao carrinho: ${product.name}`);
     };
 
-    const filteredProducts = selectedCategory === "Todos" 
-        ? products 
+    const openModal = (product) => {
+        setModalProduct(product); // Define o produto para mostrar no modal
+    };
+
+    const closeModal = () => {
+        setModalProduct(null); // Fecha o modal ao definir o produto como null
+    };
+
+    const filteredProducts = selectedCategory === "Todos"
+        ? products
         : products.filter(product => product.category === selectedCategory);
 
     if (loading) return <div>Carregando...</div>;
@@ -47,11 +54,11 @@ const ProductCatalog = () => {
         <div className={styles.container}>
             <h1 className={styles.title}>Catálogo de Produtos</h1>
 
-            <nav className={styles.nav}>
+            <nav className={styles.buttonGroup}>
                 {categories.map(category => (
                     <button
                         key={category}
-                        className={`${styles.navButton} ${selectedCategory === category ? styles.active : ''}`}
+                        className={`${styles.button} ${selectedCategory === category ? styles.active : ''}`}
                         onClick={() => setSelectedCategory(category)}
                     >
                         {category}
@@ -59,26 +66,51 @@ const ProductCatalog = () => {
                 ))}
             </nav>
 
-            <div className={styles.grid}>
+            <div className={styles.productGrid}>
                 {filteredProducts.map((product) => (
-                    <div key={product._id} className={styles.card}>
-                        <img 
-                            src={`http://localhost:5000${product.image}`} 
-                            alt={product.name} 
-                            className={styles.image} 
-                        />
-                        <h2 className={styles.productName}>{product.name}</h2>
-                        <p className={styles.description}>{product.description}</p>
-                        <p className={styles.price}>Preço: R${product.price.toFixed(2)}</p>
-                        <button 
-                            className={styles.addButton} 
-                            onClick={() => addToCart(product)}
-                        >
-                            Adicionar ao Carrinho
-                        </button>
+                    <div key={product._id} className={styles.productCard}>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={`http://localhost:5000${product.image}`}
+                                alt={product.name}
+                                className={styles.productImage}
+                            />
+                            <div className={styles.iconOverlay}>
+                                <button className={styles.iconButton} onClick={() => addToCart(product)}>
+                                    <i className="fa fa-shopping-bag"></i>
+                                </button>
+                                <button
+                                    className={styles.iconButton}
+                                    onClick={() => openModal(product)}>
+                                    <i className="fa fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 className={styles.productName}>{product.name}</h3>
+                        <p className={styles.productPrice}>R${product.price.toFixed(2)}</p>
                     </div>
                 ))}
             </div>
+
+            {/* Modal de produto */}
+            {modalProduct && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modalContent}>
+                        <button className={styles.closeButton} onClick={closeModal}>×</button>
+                        <img
+                            src={`http://localhost:5000${modalProduct.image}`}
+                            alt={modalProduct.name}
+                            className={styles.modalImage}
+                        />
+                        <h3>{modalProduct.name}</h3>
+                        <p>{modalProduct.description}</p>
+                        <p><strong>Preço: </strong>R${modalProduct.price.toFixed(2)}</p>
+                        <button className={styles.button} onClick={() => addToCart(modalProduct)}>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
