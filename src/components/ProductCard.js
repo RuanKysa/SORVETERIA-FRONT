@@ -14,7 +14,8 @@ const ProductCatalog = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("Todos");
-    const [modalProduct, setModalProduct] = useState(null); // Novo estado para controlar o produto no modal
+    const [modalProduct, setModalProduct] = useState(null);
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -31,17 +32,27 @@ const ProductCatalog = () => {
         fetchProducts();
     }, []);
 
-    const addToCart = (product) => {
-        console.log(`Produto adicionado ao carrinho: ${product.name}`);
-    };
-
     const openModal = (product) => {
-        setModalProduct(product); // Define o produto para mostrar no modal
+        setModalProduct(product);
     };
 
     const closeModal = () => {
-        setModalProduct(null); // Fecha o modal ao definir o produto como null
+        setModalProduct(null);
     };
+
+    const addToCart = async (product) => {
+        console.log("Adding to cart:", product);
+        try {
+            const response = await axios.post('http://localhost:5000/api/cart/add', {
+                productId: product._id,
+                quantity: 1
+            });
+            console.log("Added to cart:", response.data);
+        } catch (error) {
+            console.error("Error adding to cart:", error);
+        }
+    };
+
 
     const filteredProducts = selectedCategory === "Todos"
         ? products
@@ -53,6 +64,8 @@ const ProductCatalog = () => {
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>Catálogo de Produtos</h1>
+
+            {message && <div className={styles.message}>{message}</div>}
 
             <nav className={styles.buttonGroup}>
                 {categories.map(category => (
@@ -81,7 +94,7 @@ const ProductCatalog = () => {
                                 </button>
                                 <button
                                     className={styles.iconButton}
-                                    onClick={() => openModal(product)}>
+                                    onClick={() => openModal(product)} >
                                     <i className="fa fa-eye"></i>
                                 </button>
                             </div>
@@ -92,7 +105,6 @@ const ProductCatalog = () => {
                 ))}
             </div>
 
-            {/* Modal de produto */}
             {modalProduct && (
                 <div className={styles.modalOverlay}>
                     <div className={styles.modalContent}>
