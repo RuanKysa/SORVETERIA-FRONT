@@ -40,20 +40,6 @@ const ProductCatalog = () => {
         setModalProduct(null);
     };
 
-    const addToCart = async (product) => {
-        console.log("Adding to cart:", product);
-        try {
-            const response = await axios.post('http://localhost:5000/api/cart/add', {
-                productId: product._id,
-                quantity: 1
-            });
-            console.log("Added to cart:", response.data);
-        } catch (error) {
-            console.error("Error adding to cart:", error);
-        }
-    };
-
-
     const filteredProducts = selectedCategory === "Todos"
         ? products
         : products.filter(product => product.category === selectedCategory);
@@ -89,7 +75,7 @@ const ProductCatalog = () => {
                                 className={styles.productImage}
                             />
                             <div className={styles.iconOverlay}>
-                                <button className={styles.iconButton} onClick={() => addToCart(product)}>
+                                <button className={styles.iconButton}>
                                     <i className="fa fa-shopping-bag"></i>
                                 </button>
                                 <button
@@ -117,7 +103,7 @@ const ProductCatalog = () => {
                         <h3>{modalProduct.name}</h3>
                         <p>{modalProduct.description}</p>
                         <p><strong>Preço: </strong>R${modalProduct.price.toFixed(2)}</p>
-                        <button className={styles.button} onClick={() => addToCart(modalProduct)}>
+                        <button className={styles.button}>
                             Adicionar ao Carrinho
                         </button>
                     </div>
