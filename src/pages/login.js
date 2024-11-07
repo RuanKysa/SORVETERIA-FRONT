@@ -86,13 +86,13 @@ const Auth = () => {
 
         <div className={styles.buttonGroup}>
           <button
-            className={formType === 'login' ? styles.active : ''}
+            className={`${styles.toggleButton} $formType === 'login' ? styles.active : ''}`}
             onClick={() => setFormType('login')}
           >
             Login
           </button>
           <button
-            className={formType === 'register' ? styles.active : ''}
+            className={`${styles.toggleButton} $formType === 'register' ? styles.active : ''}`}
             onClick={() => setFormType('register')}
           >
             Registrar
@@ -104,6 +104,7 @@ const Auth = () => {
             <div>
               <label>Email:</label>
               <input
+                className={styles.formInput}
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -113,13 +114,14 @@ const Auth = () => {
             <div>
               <label>Senha:</label>
               <input
+                className={styles.formInput}
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
-            <button type="submit" disabled={loading}>
+            <button type="submit" className={styles.formButton} disabled={loading}>
               {loading ? 'Carregando...' : 'Login'}
             </button>
             {error && <p className={styles.error}>{error}</p>}
@@ -129,6 +131,7 @@ const Auth = () => {
             <div>
               <label>Nome:</label>
               <input
+                className={styles.formInput}
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -138,6 +141,7 @@ const Auth = () => {
             <div>
               <label>Email:</label>
               <input
+                className={styles.formInput}
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -147,6 +151,7 @@ const Auth = () => {
             <div>
               <label>Senha:</label>
               <input
+                className={styles.formInput}
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -156,6 +161,7 @@ const Auth = () => {
             <div>
               <label>CPF:</label>
               <input
+                className={styles.formInput}
                 type="text"
                 value={cpf}
                 onChange={(e) => setCpf(e.target.value)}
@@ -165,6 +171,7 @@ const Auth = () => {
             <div>
               <label>Telefone:</label>
               <input
+                className={styles.formInput}
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
@@ -175,6 +182,7 @@ const Auth = () => {
             <div>
               <label>Rua:</label>
               <input
+                className={styles.formInput}
                 type="text"
                 value={street}
                 onChange={(e) => setStreet(e.target.value)}
@@ -184,6 +192,7 @@ const Auth = () => {
             <div>
               <label>Número:</label>
               <input
+                className={styles.formInput}
                 type="text"
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
@@ -193,6 +202,7 @@ const Auth = () => {
             <div>
               <label>Complemento:</label>
               <input
+                className={styles.formInput}
                 type="text"
                 value={complement}
                 onChange={(e) => setComplement(e.target.value)}
@@ -201,6 +211,7 @@ const Auth = () => {
             <div>
               <label>Bairro:</label>
               <input
+                className={styles.formInput}
                 type="text"
                 value={neighborhood}
                 onChange={(e) => setNeighborhood(e.target.value)}
@@ -210,6 +221,7 @@ const Auth = () => {
             <div>
               <label>Cidade:</label>
               <input
+                className={styles.formInput}
                 type="text"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
@@ -219,6 +231,7 @@ const Auth = () => {
             <div>
               <label>Estado:</label>
               <input
+                className={styles.formInput}
                 type="text"
                 value={state}
                 onChange={(e) => setState(e.target.value)}
@@ -228,13 +241,14 @@ const Auth = () => {
             <div>
               <label>CEP:</label>
               <input
+                className={styles.formInput}
                 type="text"
                 value={zipCode}
                 onChange={(e) => setZipCode(e.target.value)}
                 required
               />
             </div>
-            <button type="submit" disabled={loading}>
+            <button type="submit" className={styles.formButton} disabled={loading}>
               {loading ? 'Carregando...' : 'Registrar'}
             </button>
             {error && <p className={styles.error}>{error}</p>}
