@@ -1,35 +1,46 @@
 "use client"
-
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import axios from 'axios';
 import styles from '../styles/Home.module.css';
-import { default as jwt_decode } from 'jwt-decode';
-console.log(jwt_decode);  
 
-
-
-const Header = () => {
+const Header = ({ setCart }) => {
     const [userEmail, setUserEmail] = useState(null);
+    const [userName, setUserName] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        console.log("Token:", token);  
+        console.log("Token:", token);  // Verifique se o token está presente
+
         if (token) {
-            try {
-                const decodedToken = jwt_decode(token);
-                console.log("Decoded Token:", decodedToken);  
-                setUserEmail(decodedToken.email);
-                console.log("Email do Usuário:", decodedToken.email);
-            } catch (error) {
-                console.error("Erro ao decodificar o token:", error);
-            }
+            // Requisição para o backend para buscar os dados do usuário
+            axios.get('http://localhost:5000/api/users/me', {
+                headers: {
+                    Authorization: `Bearer ${token}` // Passando o token JWT no cabeçalho
+                }
+            })
+                .then(response => {
+                    console.log("Dados do usuário:", response.data); // Exibir os dados do usuário
+                    setUserEmail(response.data.email); // Definir o email do usuário
+                    setUserName(response.data.name); // Definir o nome do usuário
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar dados do usuário:", error);
+                });
         }
     }, []);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        // Remove o token e os dados do usuário do localStorage
         localStorage.removeItem('token');
+        localStorage.removeItem('userEmail');
+
+        // Limpa os dados do usuário no estado
         setUserEmail(null);
-        
+        setUserName(null);
+
+        // Limpa o carrinho no estado do front-end
+        setCart([]);  // Limpa apenas o carrinho no front-end
     };
 
     return (
@@ -43,7 +54,7 @@ const Header = () => {
                     <li><Link href="/admin">Área Admin</Link></li>
                     {userEmail ? (
                         <>
-                            <li className={styles.userEmail}>{userEmail}</li>
+                            <li className={styles.userEmail}>{userName} ({userEmail})</li>
                             <li>
                                 <button onClick={handleLogout} className={styles.logoutButton}>
                                     Sair

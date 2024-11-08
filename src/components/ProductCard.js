@@ -1,7 +1,10 @@
+// ProductCatalog.js
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from "../styles/ProductCart.module.css";
 
+// Definindo a lista de categorias
 const categories = [
     "PICOLES DE FRUTA",
     "PICOLES DE CREME",
@@ -40,6 +43,29 @@ const ProductCatalog = () => {
         setModalProduct(null);
     };
 
+    const addToCart = async (product) => {
+        const userEmail = localStorage.getItem('userEmail'); // Recupera o email do usuário
+
+        if (!userEmail) {
+            setMessage("Por favor, faça login para adicionar itens ao carrinho.");
+            return;
+        }
+
+        try {
+            await axios.post('http://localhost:5000/api/cart/add', {
+                userEmail: userEmail,
+                productId: product._id,
+                quantity: 1,
+            });
+
+            setMessage("Produto adicionado ao carrinho com sucesso!");
+            setTimeout(() => setMessage(""), 3000);
+        } catch (error) {
+            setMessage("Erro ao adicionar produto ao carrinho.");
+            console.error(error);
+        }
+    };
+    
     const filteredProducts = selectedCategory === "Todos"
         ? products
         : products.filter(product => product.category === selectedCategory);
@@ -103,7 +129,7 @@ const ProductCatalog = () => {
                         <h3>{modalProduct.name}</h3>
                         <p>{modalProduct.description}</p>
                         <p><strong>Preço: </strong>R${modalProduct.price.toFixed(2)}</p>
-                        <button className={styles.button}>
+                        <button className={styles.button} onClick={() => addToCart(modalProduct)}>
                             Adicionar ao Carrinho
                         </button>
                     </div>

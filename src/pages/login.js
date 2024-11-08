@@ -7,13 +7,15 @@ import { useRouter } from 'next/router';
 import Layout from '@/layout/layout';
 
 const Auth = () => {
-  const [formType, setFormType] = useState('login'); 
+  const [formType, setFormType] = useState('login'); // Define o tipo do formulário (login ou registro)
 
+  // States para login
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // States para registro
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
   const [phone, setPhone] = useState('');
@@ -27,28 +29,33 @@ const Auth = () => {
 
   const router = useRouter();
 
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+ // Função para login
+const handleLoginSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
 
-    try {
+  try {
       const response = await axios.post('http://localhost:5000/api/users/login', {
-        email,
-        password,
+          email,
+          password,
       });
 
+      // Armazena o token e o email do usuário no localStorage
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userEmail', email); // Salva o email do usuário
+
       console.log('Login bem-sucedido:', response.data);
-      router.push('/');
-    } catch (error) {
+      router.push('/'); // Redireciona após o login
+  } catch (error) {
       console.error('Erro ao fazer login:', error);
       setError('Erro ao fazer login. Verifique suas credenciais.');
-    } finally {
+  } finally {
       setLoading(false);
-    }
-  };
+  }
+}
 
+  // Função para registro
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -71,6 +78,8 @@ const Auth = () => {
           zipCode,
         },
       });
+
+      // Registra o usuário com sucesso e redireciona para a página inicial
       console.log('Registro bem-sucedido:', response.data);
       router.push('/');
     } catch (error) {
@@ -84,17 +93,17 @@ const Auth = () => {
   return (
     <Layout>
       <div className={styles.container}>
-        <h1 className={styles.title}>{formType === 'login' ? 'Login' : 'Registro'}</h1>
+        <h1 className={styles.title}>{formType === 'login' ? 'Login' : 'Registrar'}</h1>
 
         <div className={styles.buttonGroup}>
           <button
-            className={`${styles.toggleButton} $formType === 'login' ? styles.active : ''}`}
+            className={`${styles.toggleButton} ${formType === 'login' ? styles.active : ''}`}
             onClick={() => setFormType('login')}
           >
             Login
           </button>
           <button
-            className={`${styles.toggleButton} $formType === 'register' ? styles.active : ''}`}
+            className={`${styles.toggleButton} ${formType === 'register' ? styles.active : ''}`}
             onClick={() => setFormType('register')}
           >
             Registrar
