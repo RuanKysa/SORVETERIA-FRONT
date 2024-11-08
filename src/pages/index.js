@@ -1,3 +1,5 @@
+"use client"
+
 import Layout from "@/layout/layout";
 import Email from "@/components/email"
 import Benefits from "@/components/Benefits";

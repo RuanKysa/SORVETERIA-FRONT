@@ -1,3 +1,5 @@
+"use client"
+
 import ProductCatalog from '../components/ProductCard';
 import Layout from '@/layout/layout';
 

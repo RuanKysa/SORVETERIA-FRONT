@@ -1,3 +1,5 @@
+"use client"
+
 import ProductCRUD from '../components/ProductCRUD'
 import UserCRUD from '../components/UserCRUD'
 import Layout from '@/layout/layout'
