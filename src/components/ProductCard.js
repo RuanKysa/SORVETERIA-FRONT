@@ -20,6 +20,7 @@ const ProductCatalog = () => {
     const [error, setError] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("Todos");
     const [modalProduct, setModalProduct] = useState(null);
+    const [quantity, setQuantity] = useState(1); // Estado para quantidade
     const [message, setMessage] = useState("");
 
     useEffect(() => {
@@ -39,6 +40,7 @@ const ProductCatalog = () => {
 
     const openModal = (product) => {
         setModalProduct(product);
+        setQuantity(1); // Resetar a quantidade quando abrir o modal
     };
 
     const closeModal = () => {
@@ -47,27 +49,29 @@ const ProductCatalog = () => {
 
     const addToCart = async (product) => {
         const userEmail = localStorage.getItem('userEmail');
-
+    
         if (!userEmail) {
             setMessage("Por favor, faça login para adicionar itens ao carrinho.");
             return;
         }
-
+    
         try {
             await axios.post('http://localhost:5000/api/cart/add', {
                 userEmail: userEmail,
                 productId: product._id,
-                quantity: 1,
+                quantity: quantity,
             });
-
+    
             setMessage("Produto adicionado ao carrinho com sucesso!");
             setTimeout(() => setMessage(""), 3000);
+    
+            // Fechar o modal após adicionar ao carrinho
+            closeModal();
         } catch (error) {
             setMessage("Erro ao adicionar produto ao carrinho.");
             console.error(error);
         }
     };
-    
     const filteredProducts = selectedCategory === "Todos"
         ? products
         : products.filter(product => product.category === selectedCategory);
@@ -131,6 +135,23 @@ const ProductCatalog = () => {
                         <h3>{modalProduct.name}</h3>
                         <p>{modalProduct.description}</p>
                         <p><strong>Preço: </strong>R${modalProduct.price.toFixed(2)}</p>
+
+                        <div className={styles.quantityControl}>
+                            <button 
+                                className={styles.quantityButton} 
+                                onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
+                            >
+                                -
+                            </button>
+                            <span className={styles.quantity}>{quantity}</span>
+                            <button 
+                                className={styles.quantityButton} 
+                                onClick={() => setQuantity(quantity + 1)}
+                            >
+                                +
+                            </button>
+                        </div>
+
                         <button className={styles.button} onClick={() => addToCart(modalProduct)}>
                             <FontAwesomeIcon icon={faCartPlus} /> Adicionar ao Carrinho
                         </button>

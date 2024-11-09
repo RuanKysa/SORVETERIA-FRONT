@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -19,13 +19,6 @@ const Auth = () => {
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
   const [phone, setPhone] = useState('');
-  const [street, setStreet] = useState('');
-  const [number, setNumber] = useState('');
-  const [complement, setComplement] = useState('');
-  const [neighborhood, setNeighborhood] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [zipCode, setZipCode] = useState('');
 
   const router = useRouter();
 
@@ -41,12 +34,13 @@ const Auth = () => {
         password,
       });
 
-      // Armazena o token e o email do usuário no localStorage
+      // Armazena o token e o papel do usuário no localStorage
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userEmail', email); // Salva o email do usuário
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userRole', response.data.role); // Armazena o papel do usuário
 
       console.log('Login bem-sucedido:', response.data);
-      router.push('/'); // Redireciona após o login
+      router.push('/catalogo'); 
     } catch (error) {
       console.error('Erro ao fazer login:', error);
       setError('Erro ao fazer login. Verifique suas credenciais.');
@@ -70,9 +64,8 @@ const Auth = () => {
         phone,
       });
 
-      // Registra o usuário com sucesso e redireciona para a página inicial
       console.log('Registro bem-sucedido:', response.data);
-      router.push('/');
+      router.push('/login');
     } catch (error) {
       console.error('Erro ao registrar:', error);
       setError('Erro ao registrar. Tente novamente.');

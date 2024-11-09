@@ -11,6 +11,7 @@ export default function Admin() {
                 <section>
                     <ProductCRUD />
                 </section>
+               
             </>
         </Layout>
     )

@@ -1,40 +1,166 @@
-/* styles/Checkout.module.css */
 .checkoutContainer {
-    padding: 20px;
-    max-width: 900px;
+    max-width: 800px;
     margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
 }
 
-.userData {
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
     margin-bottom: 20px;
 }
 
-.cartItems {
-    margin-top: 30px;
+.productsContainer {
+    margin-bottom: 20px;
+}
+
+.sectionTitle {
+    font-size: 20px;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 10px;
 }
 
 .cartItem {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
 }
 
 .productImage {
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     object-fit: cover;
-    margin-right: 15px;
+    border-radius: 5px;
 }
 
-.finalizeButton {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
+.productName {
+    font-size: 16px;
+    color: #333;
+    flex: 1;
+    margin-left: 10px;
+}
+
+.productQuantity,
+.productPrice {
+    font-size: 14px;
+    color: #666;
+}
+
+.emptyCartMessage,
+.loadingMessage {
+    text-align: center;
+    font-size: 16px;
+    color: #888;
+}
+
+.addressContainer {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.inputField {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.paymentContainer {
     margin-top: 20px;
 }
 
-.finalizeButton:hover {
-    background-color: #45a049;
+.selectField {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.pixCode {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #444;
+}
+
+.creditCardButton {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.creditCardModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modalTitle {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.modalInput {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.closeModalButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.confirmOrderButton {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
 }
