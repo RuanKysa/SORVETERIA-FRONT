@@ -1,28 +1,99 @@
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-color: #0a9ef3; 
+.homePage {
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+    color: #333;
   }
   
-  .nav {
-    display: flex;
+  .resaleSystem {
+    padding: 2rem;
+    background: linear-gradient(135deg, #ff7f50, #ff6347);
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
   }
   
-  .nav ul {
-    list-style: none;
-    display: flex;
-    gap: 1rem; 
-    padding: 0; 
+  .resaleSystem:hover {
+    transform: translateY(-5px);
   }
   
-  .nav a {
+  .resaleSystem h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+  
+  .resaleSystem p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  .contactInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  
+  .contactColumns {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .contactColumns {
+      flex-direction: row;
+    }
+  }
+  
+  .mapColumn {
+    flex: 1;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .mapColumn iframe {
+    width: 100%;
+    height: 300px;
+    border: none;
+  }
+  
+  .infoColumn {
+    flex: 1;
+    padding: 2rem;
+    background-color: #fff;
+    color: #333;
+    border-radius: 12px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .infoColumn:hover {
+    transform: translateY(-5px);
+  }
+  
+  .infoColumn h3 {
+    font-size: 1.8rem;
+    color: #ff6347;
+    margin-bottom: 1rem;
+  }
+  
+  .infoColumn p {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .infoColumn a {
+    color: #ff6347;
     text-decoration: none;
-    color: #333; 
+    font-weight: bold;
   }
   
-  .nav a:hover {
-    text-decoration: underline; 
+  .infoColumn a:hover {
+    color: #ff7f50;
+    text-decoration: underline;
   }
   

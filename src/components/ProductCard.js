@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from "../styles/ProductCart.module.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingBag, faEye, faCartPlus } from '@fortawesome/free-solid-svg-icons';
 
 // Definindo a lista de categorias
 const categories = [
@@ -44,7 +46,7 @@ const ProductCatalog = () => {
     };
 
     const addToCart = async (product) => {
-        const userEmail = localStorage.getItem('userEmail'); // Recupera o email do usuário
+        const userEmail = localStorage.getItem('userEmail');
 
         if (!userEmail) {
             setMessage("Por favor, faça login para adicionar itens ao carrinho.");
@@ -101,13 +103,13 @@ const ProductCatalog = () => {
                                 className={styles.productImage}
                             />
                             <div className={styles.iconOverlay}>
-                                <button className={styles.iconButton}>
-                                    <i className="fa fa-shopping-bag"></i>
+                                <button className={styles.iconButton} onClick={() => addToCart(product)}>
+                                    <FontAwesomeIcon icon={faCartPlus} /> {/* Ícone do carrinho */}
                                 </button>
                                 <button
                                     className={styles.iconButton}
                                     onClick={() => openModal(product)} >
-                                    <i className="fa fa-eye"></i>
+                                    <FontAwesomeIcon icon={faEye} /> {/* Ícone de visualização */}
                                 </button>
                             </div>
                         </div>
@@ -130,7 +132,7 @@ const ProductCatalog = () => {
                         <p>{modalProduct.description}</p>
                         <p><strong>Preço: </strong>R${modalProduct.price.toFixed(2)}</p>
                         <button className={styles.button} onClick={() => addToCart(modalProduct)}>
-                            Adicionar ao Carrinho
+                            <FontAwesomeIcon icon={faCartPlus} /> Adicionar ao Carrinho
                         </button>
                     </div>
                 </div>
