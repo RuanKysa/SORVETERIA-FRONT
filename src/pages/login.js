@@ -29,16 +29,16 @@ const Auth = () => {
 
   const router = useRouter();
 
- // Função para login
-const handleLoginSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError(null);
+  // Função para login
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-  try {
+    try {
       const response = await axios.post('http://localhost:5000/api/users/login', {
-          email,
-          password,
+        email,
+        password,
       });
 
       // Armazena o token e o email do usuário no localStorage
@@ -47,13 +47,13 @@ const handleLoginSubmit = async (e) => {
 
       console.log('Login bem-sucedido:', response.data);
       router.push('/'); // Redireciona após o login
-  } catch (error) {
+    } catch (error) {
       console.error('Erro ao fazer login:', error);
       setError('Erro ao fazer login. Verifique suas credenciais.');
-  } finally {
+    } finally {
       setLoading(false);
+    }
   }
-}
 
   // Função para registro
   const handleRegisterSubmit = async (e) => {
@@ -68,15 +68,6 @@ const handleLoginSubmit = async (e) => {
         password,
         cpf,
         phone,
-        address: {
-          street,
-          number,
-          complement,
-          neighborhood,
-          city,
-          state,
-          zipCode,
-        },
       });
 
       // Registra o usuário com sucesso e redireciona para a página inicial
@@ -186,76 +177,6 @@ const handleLoginSubmit = async (e) => {
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                required
-              />
-            </div>
-            <h3>Endereço</h3>
-            <div>
-              <label>Rua:</label>
-              <input
-                className={styles.formInput}
-                type="text"
-                value={street}
-                onChange={(e) => setStreet(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Número:</label>
-              <input
-                className={styles.formInput}
-                type="text"
-                value={number}
-                onChange={(e) => setNumber(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Complemento:</label>
-              <input
-                className={styles.formInput}
-                type="text"
-                value={complement}
-                onChange={(e) => setComplement(e.target.value)}
-              />
-            </div>
-            <div>
-              <label>Bairro:</label>
-              <input
-                className={styles.formInput}
-                type="text"
-                value={neighborhood}
-                onChange={(e) => setNeighborhood(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Cidade:</label>
-              <input
-                className={styles.formInput}
-                type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Estado:</label>
-              <input
-                className={styles.formInput}
-                type="text"
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>CEP:</label>
-              <input
-                className={styles.formInput}
-                type="text"
-                value={zipCode}
-                onChange={(e) => setZipCode(e.target.value)}
                 required
               />
             </div>

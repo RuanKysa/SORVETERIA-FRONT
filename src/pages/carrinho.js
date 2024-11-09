@@ -1,22 +1,21 @@
-"use client"
+// Carrinho.js
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Layout from "@/layout/layout";
-import styles from '../styles/Carrinho.module.css'; // Adicione um arquivo CSS para o layout
+import styles from '../styles/Carrinho.module.css';
 
 export default function Carrinho() {
     const [cart, setCart] = useState(null);
     const [userEmail, setUserEmail] = useState(null);
 
-    // Usando useEffect para acessar o localStorage apenas no cliente
     useEffect(() => {
         const email = localStorage.getItem('userEmail');
         if (email) {
-            setUserEmail(email); // Armazena o email do usuário no estado
+            setUserEmail(email);
         }
     }, []);
 
-    // Efeito para buscar o carrinho quando o email estiver disponível
     useEffect(() => {
         const fetchCart = async () => {
             if (userEmail) {
@@ -32,6 +31,11 @@ export default function Carrinho() {
         fetchCart();
     }, [userEmail]);
 
+    const handleCheckout = () => {
+        // Redireciona para a página de confirmação do pedido
+        window.location.href = '/checkout';
+    };
+
     return (
         <Layout>
             <div className={styles.cartContainer}>
@@ -41,8 +45,8 @@ export default function Carrinho() {
                         cart.items.map(item => (
                             <div key={item.productId._id} className={styles.cartItem}>
                                 <img
-                                    src={`http://localhost:5000${item.productId.image}`} // Acesse a imagem através de item.productId.image
-                                    alt={item.productId.name} // Acesse o nome do produto através de item.productId.name
+                                    src={`http://localhost:5000${item.productId.image}`}
+                                    alt={item.productId.name}
                                     className={styles.productImage}
                                 />
                                 <h3>{item.productId.name}</h3>
@@ -56,6 +60,8 @@ export default function Carrinho() {
                 ) : (
                     <p>Carregando carrinho...</p>
                 )}
+
+                <button onClick={handleCheckout} className={styles.checkoutButton}>Finalizar Pedido</button>
             </div>
         </Layout>
     );

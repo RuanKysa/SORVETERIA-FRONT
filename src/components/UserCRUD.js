@@ -11,15 +11,6 @@ const UserCRUD = () => {
         email: '',
         password: '',
         cpf: '',
-        address: {
-            street: '',
-            number: '',
-            city: '',
-            state: '',
-            zipCode: '',
-            complement: '',
-            neighborhood: '',
-        },
         phone: ''
     });
     const [editingUserId, setEditingUserId] = useState(null);
@@ -103,15 +94,6 @@ const UserCRUD = () => {
             email: '',
             password: '',
             cpf: '',
-            address: {
-                street: '',
-                number: '',
-                city: '',
-                state: '',
-                zipCode: '',
-                complement: '',
-                neighborhood: '',
-            },
             phone: ''
         });
         setIsModalOpen(true);
@@ -125,15 +107,6 @@ const UserCRUD = () => {
             email: '',
             password: '',
             cpf: '',
-            address: {
-                street: '',
-                number: '',
-                city: '',
-                state: '',
-                zipCode: '',
-                complement: '',
-                neighborhood: '',
-            },
             phone: ''
         });
     };
@@ -203,68 +176,6 @@ const UserCRUD = () => {
                                 value={formData.cpf}
                                 onChange={handleChange}
                                 placeholder="CPF"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="address.street"
-                                className={styles.input}
-                                value={formData.address.street}
-                                onChange={handleChange}
-                                placeholder="Rua"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="address.number"
-                                className={styles.input}
-                                value={formData.address.number}
-                                onChange={handleChange}
-                                placeholder="Número"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="address.city"
-                                className={styles.input}
-                                value={formData.address.city}
-                                onChange={handleChange}
-                                placeholder="Cidade"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="address.state"
-                                className={styles.input}
-                                value={formData.address.state}
-                                onChange={handleChange}
-                                placeholder="Estado"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="address.zipCode"
-                                className={styles.input}
-                                value={formData.address.zipCode}
-                                onChange={handleChange}
-                                placeholder="CEP"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="address.complement"
-                                className={styles.input}
-                                value={formData.address.complement}
-                                onChange={handleChange}
-                                placeholder="Complemento"
-                            />
-                            <input
-                                type="text"
-                                name="address.neighborhood"
-                                className={styles.input}
-                                value={formData.address.neighborhood}
-                                onChange={handleChange}
-                                placeholder="Bairro"
                                 required
                             />
                             <input

@@ -1,0 +1,40 @@
+/* styles/Checkout.module.css */
+.checkoutContainer {
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.userData {
+    margin-bottom: 20px;
+}
+
+.cartItems {
+    margin-top: 30px;
+}
+
+.cartItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.productImage {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.finalizeButton {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.finalizeButton:hover {
+    background-color: #45a049;
+}

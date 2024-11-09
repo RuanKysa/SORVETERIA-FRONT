@@ -56,6 +56,9 @@ const Header = ({ setCart }) => {
                         <>
                             <li className={styles.userEmail}>{userName} ({userEmail})</li>
                             <li>
+                                <Link href="/monitorar-pedido">Monitorar Pedidos</Link> {/* Link para monitorar pedidos */}
+                            </li>
+                            <li>
                                 <button onClick={handleLogout} className={styles.logoutButton}>
                                     Sair
                                 </button>
