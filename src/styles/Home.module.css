@@ -1,99 +1,115 @@
+/* Home.module.css */
 .homePage {
-    padding: 2rem;
-    font-family: Arial, sans-serif;
-    color: #333;
-  }
-  
-  .resaleSystem {
-    padding: 2rem;
-    background: linear-gradient(135deg, #ff7f50, #ff6347);
-    color: #fff;
-    border-radius: 12px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease;
-  }
-  
-  .resaleSystem:hover {
-    transform: translateY(-5px);
-  }
-  
-  .resaleSystem h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #fff;
-  }
-  
-  .resaleSystem p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-  }
-  
-  .contactInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-  
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.resaleSystem {
+  padding: 2rem;
+  background: linear-gradient(135deg, #ff7f50, #ff6347);
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.resaleSystem:hover {
+  transform: translateY(-5px);
+}
+
+.resaleSystem h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.resaleSystem p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.contactColumns {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
   .contactColumns {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    flex-direction: row;
   }
-  
-  @media (min-width: 768px) {
-    .contactColumns {
-      flex-direction: row;
-    }
-  }
-  
-  .mapColumn {
-    flex: 1;
-    overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
-  }
-  
+}
+
+.mapColumn {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.mapColumn iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+}
+
+.infoColumn {
+  flex: 1;
+  padding: 2rem;
+  background-color: #fff;
+  color: #333;
+  border-radius: 12px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.infoColumn:hover {
+  transform: translateY(-5px);
+}
+
+.infoColumn h3 {
+  font-size: 1.8rem;
+  color: #ff6347;
+  margin-bottom: 1rem;
+}
+
+.infoColumn p {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.infoColumn a {
+  color: #ff6347;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.infoColumn a:hover {
+  color: #ff7f50;
+  text-decoration: underline;
+}
+
+.infoColumn a:focus {
+  outline: 2px solid #ff6347;
+  outline-offset: 4px;
+}
+
+.mapColumn iframe {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
   .mapColumn iframe {
-    width: 100%;
-    height: 300px;
-    border: none;
+    height: 250px;
   }
-  
-  .infoColumn {
-    flex: 1;
-    padding: 2rem;
-    background-color: #fff;
-    color: #333;
-    border-radius: 12px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-  }
-  
-  .infoColumn:hover {
-    transform: translateY(-5px);
-  }
-  
-  .infoColumn h3 {
-    font-size: 1.8rem;
-    color: #ff6347;
-    margin-bottom: 1rem;
-  }
-  
-  .infoColumn p {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .infoColumn a {
-    color: #ff6347;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  .infoColumn a:hover {
-    color: #ff7f50;
-    text-decoration: underline;
-  }
-  
+}

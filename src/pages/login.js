@@ -7,68 +7,125 @@ import { useRouter } from 'next/router';
 import Layout from '@/layout/layout';
 
 const Auth = () => {
-  const [formType, setFormType] = useState('login'); // Define o tipo do formulário (login ou registro)
-
-  // States para login
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+  const [formType, setFormType] = useState('login');
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: '',
+    name: '',
+    cpf: '',
+    phone: ''
+  });
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
-  // States para registro
-  const [name, setName] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [phone, setPhone] = useState('');
-
   const router = useRouter();
 
-  // Função para login
+  // Formatação automática do CPF
+  const formatCpf = (cpf) => {
+    cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
+    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'); // Formata
+  };
+
+  // Formatação automática do telefone
+  const formatPhone = (phone) => {
+    phone = phone.replace(/\D/g, ''); // Remove caracteres não numéricos
+    return phone.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/, '($1) $2 $3-$4'); // Formata
+  };
+
+  // Atualização dos campos com formatação de CPF e Telefone
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'cpf') {
+      setCredentials((prev) => ({ ...prev, cpf: formatCpf(value) }));
+    } else if (name === 'phone') {
+      setCredentials((prev) => ({ ...prev, phone: formatPhone(value) }));
+    } else {
+      setCredentials((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  // Validação dos campos
+  const validateFields = () => {
+    const newErrors = {};
+
+    if (!credentials.email) {
+      newErrors.email = 'Email é obrigatório.';
+    } else if (!/\S+@(gmail\.com|outlook\.com|yahoo\.com)$/.test(credentials.email)) {
+      newErrors.email = 'O email deve ser @gmail.com, @outlook.com ou @yahoo.com.';
+    }
+
+    if (!credentials.password) {
+      newErrors.password = 'Senha é obrigatória.';
+    } else if (credentials.password.length < 6) {
+      newErrors.password = 'Senha deve ter pelo menos 6 caracteres.';
+    }
+
+    if (formType === 'register') {
+      if (!credentials.name) newErrors.name = 'Nome é obrigatório.';
+      
+      if (!credentials.cpf) {
+        newErrors.cpf = 'CPF é obrigatório.';
+      } else if (!/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(credentials.cpf)) {
+        newErrors.cpf = 'CPF inválido.';
+      }
+
+      if (!credentials.phone) {
+        newErrors.phone = 'Telefone é obrigatório.';
+      } else if (!/^\(\d{2}\) \d{1} \d{4}-\d{4}$/.test(credentials.phone)) {
+        newErrors.phone = 'Telefone inválido.';
+      }
+    }
+
+    setErrors(newErrors);
+    
+    // Remove as mensagens de erro após 3 segundos
+    setTimeout(() => setErrors({}), 3000);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+    if (!validateFields()) return;
+
     setLoading(true);
-    setError(null);
+    setErrors({});
 
     try {
       const response = await axios.post('http://localhost:5000/api/users/login', {
-        email,
-        password,
+        email: credentials.email,
+        password: credentials.password,
       });
 
-      // Armazena o token e o papel do usuário no localStorage
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userRole', response.data.role); // Armazena o papel do usuário
-
-      console.log('Login bem-sucedido:', response.data);
-      router.push('/catalogo'); 
+      localStorage.setItem('userEmail', credentials.email);
+      localStorage.setItem('userRole', response.data.role);
+      router.push('/catalogo');
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
-      setError('Erro ao fazer login. Verifique suas credenciais.');
+      setErrors({ general: 'Erro ao fazer login. Verifique suas credenciais.' });
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  // Função para registro
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
+    if (!validateFields()) return;
+
     setLoading(true);
-    setError(null);
+    setErrors({});
 
     try {
       const response = await axios.post('http://localhost:5000/api/users/register', {
-        name,
-        email,
-        password,
-        cpf,
-        phone,
+        name: credentials.name,
+        email: credentials.email,
+        password: credentials.password,
+        cpf: credentials.cpf,
+        phone: credentials.phone,
       });
 
-      console.log('Registro bem-sucedido:', response.data);
       router.push('/login');
     } catch (error) {
-      console.error('Erro ao registrar:', error);
-      setError('Erro ao registrar. Tente novamente.');
+      setErrors({ general: 'Erro ao registrar. Tente novamente.' });
     } finally {
       setLoading(false);
     }
@@ -94,91 +151,76 @@ const Auth = () => {
           </button>
         </div>
 
-        {formType === 'login' ? (
-          <form onSubmit={handleLoginSubmit}>
-            <div>
-              <label>Email:</label>
-              <input
-                className={styles.formInput}
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Senha:</label>
-              <input
-                className={styles.formInput}
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit" className={styles.formButton} disabled={loading}>
-              {loading ? 'Carregando...' : 'Login'}
-            </button>
-            {error && <p className={styles.error}>{error}</p>}
-          </form>
-        ) : (
-          <form onSubmit={handleRegisterSubmit}>
-            <div>
-              <label>Nome:</label>
-              <input
-                className={styles.formInput}
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Email:</label>
-              <input
-                className={styles.formInput}
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Senha:</label>
-              <input
-                className={styles.formInput}
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>CPF:</label>
-              <input
-                className={styles.formInput}
-                type="text"
-                value={cpf}
-                onChange={(e) => setCpf(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Telefone:</label>
-              <input
-                className={styles.formInput}
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit" className={styles.formButton} disabled={loading}>
-              {loading ? 'Carregando...' : 'Registrar'}
-            </button>
-            {error && <p className={styles.error}>{error}</p>}
-          </form>
-        )}
+        <form onSubmit={formType === 'login' ? handleLoginSubmit : handleRegisterSubmit}>
+          {formType === 'register' && (
+            <>
+              <div>
+                <label>Nome:</label>
+                <input
+                  className={styles.formInput}
+                  type="text"
+                  name="name"
+                  value={credentials.name}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.name && <p className={styles.error}>{errors.name}</p>}
+              </div>
+              <div>
+                <label>CPF:</label>
+                <input
+                  className={styles.formInput}
+                  type="text"
+                  name="cpf"
+                  value={credentials.cpf}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.cpf && <p className={styles.error}>{errors.cpf}</p>}
+              </div>
+              <div>
+                <label>Telefone:</label>
+                <input
+                  className={styles.formInput}
+                  type="text"
+                  name="phone"
+                  value={credentials.phone}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.phone && <p className={styles.error}>{errors.phone}</p>}
+              </div>
+            </>
+          )}
+          <div>
+            <label>Email:</label>
+            <input
+              className={styles.formInput}
+              type="email"
+              name="email"
+              value={credentials.email}
+              onChange={handleChange}
+              required
+            />
+            {errors.email && <p className={styles.error}>{errors.email}</p>}
+          </div>
+          <div>
+            <label>Senha:</label>
+            <input
+              className={styles.formInput}
+              type="password"
+              name="password"
+              value={credentials.password}
+              onChange={handleChange}
+              required
+            />
+            {errors.password && <p className={styles.error}>{errors.password}</p>}
+          </div>
+          <button type="submit" className={styles.formButton} disabled={loading}>
+            {loading ? 'Carregando...' : formType === 'login' ? 'Login' : 'Registrar'}
+          </button>
+          {errors.general && <p className={styles.error}>{errors.general}</p>}
+        </form>
       </div>
     </Layout>
   );

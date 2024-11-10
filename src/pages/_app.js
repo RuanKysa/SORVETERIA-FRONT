@@ -1,5 +1,5 @@
 "use client"
-import '@/styles/globals.css';
+import '../styles/globals.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function MyApp({ Component, pageProps }) {

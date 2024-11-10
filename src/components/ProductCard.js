@@ -1,6 +1,4 @@
-// ProductCatalog.js
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import styles from "../styles/ProductCart.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,6 +12,11 @@ const categories = [
     "Todos"
 ];
 
+// Configuração global do Axios para evitar repetição da URL base
+const axiosInstance = axios.create({
+    baseURL: 'http://localhost:5000/api'
+});
+
 const ProductCatalog = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -23,31 +26,32 @@ const ProductCatalog = () => {
     const [quantity, setQuantity] = useState(1); // Estado para quantidade
     const [message, setMessage] = useState("");
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/api/products');
-                setProducts(response.data);
-            } catch (error) {
-                setError('Erro ao carregar produtos.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProducts();
+    // Fetch de produtos
+    const fetchProducts = useCallback(async () => {
+        try {
+            const response = await axiosInstance.get('/products');
+            setProducts(response.data);
+        } catch (err) {
+            setError('Erro ao carregar produtos.');
+        } finally {
+            setLoading(false);
+        }
     }, []);
 
-    const openModal = (product) => {
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
+
+    const openModal = useCallback((product) => {
         setModalProduct(product);
         setQuantity(1); // Resetar a quantidade quando abrir o modal
-    };
+    }, []);
 
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
         setModalProduct(null);
-    };
+    }, []);
 
-    const addToCart = async (product) => {
+    const addToCart = useCallback(async (product) => {
         const userEmail = localStorage.getItem('userEmail');
     
         if (!userEmail) {
@@ -56,7 +60,7 @@ const ProductCatalog = () => {
         }
     
         try {
-            await axios.post('http://localhost:5000/api/cart/add', {
+            await axiosInstance.post('/cart/add', {
                 userEmail: userEmail,
                 productId: product._id,
                 quantity: quantity,
@@ -71,12 +75,13 @@ const ProductCatalog = () => {
             setMessage("Erro ao adicionar produto ao carrinho.");
             console.error(error);
         }
-    };
+    }, [quantity, closeModal]);
+
     const filteredProducts = selectedCategory === "Todos"
         ? products
         : products.filter(product => product.category === selectedCategory);
 
-    if (loading) return <div>Carregando...</div>;
+    if (loading) return <div className={styles.loading}>Carregando...</div>;
     if (error) return <div>{error}</div>;
 
     return (

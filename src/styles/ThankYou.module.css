@@ -1,3 +1,4 @@
+/* .thankYouContainer */
 .thankYouContainer {
     max-width: 600px;
     margin: 0 auto;
@@ -6,33 +7,64 @@
     background-color: #f8f8f8;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: 300px;  /* Garantir que o conteúdo tenha uma altura mínima */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
+/* .title */
 .title {
-    font-size: 24px;
+    font-size: 2rem;
     font-weight: bold;
     color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
+/* .message */
 .message {
-    font-size: 16px;
+    font-size: 1.125rem;
     color: #555;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    line-height: 1.5;  /* Melhorar a legibilidade */
 }
 
+/* .homeButton */
 .homeButton {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 12px 25px;
+    font-size: 1.125rem;
     font-weight: bold;
     color: #fff;
     background-color: #007bff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Adicionar transição suave no botão */
 }
 
+/* Hover effect */
 .homeButton:hover {
     background-color: #0056b3;
+    transform: scale(1.05);  /* Efeito de aumento suave */
+}
+
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+    .thankYouContainer {
+        padding: 15px;
+    }
+
+    .title {
+        font-size: 1.5rem;  /* Ajustar título para telas menores */
+    }
+
+    .message {
+        font-size: 1rem;  /* Ajustar tamanho da mensagem */
+        margin-bottom: 20px;
+    }
+
+    .homeButton {
+        padding: 10px 20px; /* Ajustar o tamanho do botão */
+        font-size: 1rem;  /* Ajustar tamanho do texto do botão */
+    }
 }

@@ -35,7 +35,6 @@ export default function Home() {
               ></iframe>
             </div>
 
-            {/* Coluna de informações de contato */}
             <div className={styles.infoColumn}>
               <h3>Localização e Contato</h3>
               <p>Endereço: <a href="https://maps.app.goo.gl/cCe7vVr4Bs1nSqMV9" target="_blank" rel="noopener noreferrer">

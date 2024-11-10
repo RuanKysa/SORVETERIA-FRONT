@@ -1,9 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faHome, faBook, faShoppingCart, faUser, faPencilAlt, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import styles from '../styles/Header.module.css';
+
+const ProfileMenu = ({ userName, userEmail, handleLogout }) => (
+    <ul className={styles.profileMenu}>
+        <li className={styles.profileItem}>{userName}</li>
+        <li className={styles.profileItem}>{userEmail}</li>
+        <li>
+            <button onClick={handleLogout} className={styles.logoutButton}>Sair</button>
+        </li>
+    </ul>
+);
 
 const Header = ({ setCart }) => {
     const [userEmail, setUserEmail] = useState(null);
@@ -14,27 +24,30 @@ const Header = ({ setCart }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            axios.get('http://localhost:5000/api/users/me', {
-                headers: { Authorization: `Bearer ${token}` }
-            })
-                .then(response => {
+            const fetchUserData = async () => {
+                try {
+                    const response = await axios.get('http://localhost:5000/api/users/me', {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
                     setUserEmail(response.data.email);
                     setUserName(response.data.name);
-                })
-                .catch(error => console.error("Erro ao buscar dados do usuário:", error));
+                } catch (error) {
+                    console.error("Erro ao buscar dados do usuário:", error);
+                }
+            };
+            fetchUserData();
         }
     }, []);
 
-    const handleLogout = () => {
+    const handleLogout = useCallback(() => {
         localStorage.removeItem('token');
         setUserEmail(null);
         setUserName(null);
         setCart([]);
-    };
+    }, [setCart]);
 
-    const toggleNav = () => setIsNavOpen(!isNavOpen);
-
-    const toggleProfileMenu = () => setIsProfileMenuOpen(!isProfileMenuOpen);
+    const toggleNav = useCallback(() => setIsNavOpen((prev) => !prev), []);
+    const toggleProfileMenu = useCallback(() => setIsProfileMenuOpen((prev) => !prev), []);
 
     return (
         <header className={styles.header}>
@@ -51,15 +64,7 @@ const Header = ({ setCart }) => {
                     {userEmail ? (
                         <li className={styles.profileLink} onClick={toggleProfileMenu}>
                             <FontAwesomeIcon icon={faUserCircle} /> Perfil
-                            {isProfileMenuOpen && (
-                                <ul className={styles.profileMenu}>
-                                    <li className={styles.profileItem}>{userName}</li>
-                                    <li className={styles.profileItem}>{userEmail}</li>
-                                    <li>
-                                        <button onClick={handleLogout} className={styles.logoutButton}>Sair</button>
-                                    </li>
-                                </ul>
-                            )}
+                            {isProfileMenuOpen && <ProfileMenu userName={userName} userEmail={userEmail} handleLogout={handleLogout} />}
                         </li>
                     ) : (
                         <li><Link href="/login" className={styles.navLink}><FontAwesomeIcon icon={faUser} /> Login</Link></li>
