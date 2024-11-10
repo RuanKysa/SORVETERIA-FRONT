@@ -13,10 +13,9 @@
 
 /* Título do header */
 .headerTitle {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: #fff;
   margin: 0;
-  font-weight: bold; /* Aumenta a visibilidade do título */
 }
 
 /* Ícone do menu (hamburguer) */
