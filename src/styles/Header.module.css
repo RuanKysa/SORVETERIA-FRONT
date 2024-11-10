@@ -9,9 +9,29 @@
 }
 
 .headerTitle {
-  font-size: 1.5rem;
+  /* font-size: 1.5rem;
   color: #fff;
-  margin: 0;
+  margin: 0; */
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ff6b81;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: linear-gradient(45deg, #ff9f43, #ff6b81, #ffcc33);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: pop 1s ease-in-out infinite alternate;
+  padding: 0.5rem;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
 }
 
 .hamburgerIcon {
