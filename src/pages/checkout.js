@@ -10,6 +10,7 @@ export default function Checkout() {
     const [userData, setUserData] = useState(null);
     const [address, setAddress] = useState({ cep: '', street: '', number: '', city: '', state: '', postalCode: '' });
     const [loading, setLoading] = useState(true);
+    const [isProcessingOrder, setIsProcessingOrder] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -18,10 +19,11 @@ export default function Checkout() {
     }, []);
 
     useEffect(() => {
-        if (userEmail) {
+        const token = localStorage.getItem('token');
+        if (userEmail && token) {
             setLoading(true);
             fetchCart();
-            fetchUserData();
+            fetchUserData(token);
         }
     }, [userEmail]);
 
@@ -31,14 +33,14 @@ export default function Checkout() {
             setCart(response.data);
         } catch (error) {
             console.error("Erro ao carregar o carrinho:", error);
+            alert("Não foi possível carregar o carrinho. Por favor, tente novamente.");
         } finally {
             setLoading(false);
         }
     };
 
-    const fetchUserData = async () => {
+    const fetchUserData = async (token) => {
         try {
-            const token = localStorage.getItem('token');
             const response = await axios.get('http://localhost:5000/api/users/me', {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -52,20 +54,22 @@ export default function Checkout() {
             });
         } catch (error) {
             console.error("Erro ao carregar os dados do usuário:", error);
+            alert("Não foi possível carregar os dados do usuário. Verifique sua conexão e tente novamente.");
         }
     };
 
     const fetchAddressByCEP = async () => {
-        if (address.cep.length === 8) {
+        const sanitizedCEP = address.cep.replace(/\D/g, ''); // Remove caracteres não numéricos
+        if (/^\d{8}$/.test(sanitizedCEP)) {
             try {
-                const response = await axios.get(`https://viacep.com.br/ws/${address.cep}/json/`);
+                const response = await axios.get(`https://viacep.com.br/ws/${sanitizedCEP}/json/`);
                 if (!response.data.erro) {
                     setAddress(prev => ({
                         ...prev,
                         street: response.data.logradouro,
                         city: response.data.localidade,
                         state: response.data.uf,
-                        postalCode: address.cep,
+                        postalCode: sanitizedCEP,
                     }));
                 } else {
                     alert("CEP não encontrado.");
@@ -82,36 +86,48 @@ export default function Checkout() {
             alert("Erro: Usuário não identificado.");
             return;
         }
-
+    
         if (!cart || cart.items.length === 0) {
             alert("O carrinho está vazio!");
             return;
         }
-
+    
         const { street, number, city, state, postalCode } = address;
         if (!street || !number || !city || !state || !postalCode) {
             alert("Por favor, preencha todos os campos de endereço.");
             return;
         }
-
+    
+        setIsProcessingOrder(true);
         try {
-            await axios.post('http://localhost:5000/api/orders', {
+            console.log("Dados do pedido:", {
+                userEmail,
+                items: cart.items,
+                address: { street, number, city, state, postalCode }
+            });
+    
+            const orderResponse = await axios.post('http://localhost:5000/api/orders', {
                 userEmail,
                 items: cart.items,
                 address: { street, number, city, state, postalCode },
             });
-
-            await axios.delete('http://localhost:5000/api/cart/clear', { data: { userEmail } });
+            console.log("Resposta do pedido:", orderResponse.data);
+    
+            const clearCartResponse = await axios.delete('http://localhost:5000/api/cart/clear', { data: { userEmail } });
+            console.log("Resposta ao limpar o carrinho:", clearCartResponse.data);
+    
             localStorage.removeItem('cart');
             alert("Pedido confirmado com sucesso!");
-
+    
             router.push('/thankyou');
         } catch (error) {
             console.error("Erro ao confirmar o pedido:", error);
             alert("Erro ao confirmar o pedido. Tente novamente.");
+        } finally {
+            setIsProcessingOrder(false);
         }
     };
-
+    
     const handleChange = (field, value) => {
         setAddress(prev => ({ ...prev, [field]: value }));
     };
@@ -132,6 +148,7 @@ export default function Checkout() {
                                         src={`http://localhost:5000${item.productId.image}`}
                                         alt={item.productId.name}
                                         className={styles.productImage}
+                                        aria-label={`Imagem de ${item.productId.name}`}
                                     />
                                     <h3 className={styles.productName}>{item.productId.name}</h3>
                                     <p className={styles.productQuantity}>Quantidade: {item.quantity}</p>
@@ -153,6 +170,7 @@ export default function Checkout() {
                         onBlur={fetchAddressByCEP}
                         placeholder="CEP"
                         className={styles.inputField}
+                        aria-label="CEP"
                     />
                     <input
                         type="text"
@@ -160,6 +178,7 @@ export default function Checkout() {
                         onChange={(e) => handleChange('street', e.target.value)}
                         placeholder="Rua"
                         className={styles.inputField}
+                        aria-label="Rua"
                     />
                     <input
                         type="text"
@@ -167,6 +186,7 @@ export default function Checkout() {
                         onChange={(e) => handleChange('number', e.target.value)}
                         placeholder="Número"
                         className={styles.inputField}
+                        aria-label="Número"
                     />
                     <input
                         type="text"
@@ -174,6 +194,7 @@ export default function Checkout() {
                         onChange={(e) => handleChange('city', e.target.value)}
                         placeholder="Cidade"
                         className={styles.inputField}
+                        aria-label="Cidade"
                     />
                     <input
                         type="text"
@@ -181,10 +202,19 @@ export default function Checkout() {
                         onChange={(e) => handleChange('state', e.target.value)}
                         placeholder="Estado"
                         className={styles.inputField}
+                        aria-label="Estado"
                     />
                 </div>
 
-                <button onClick={handleConfirmOrder} className={styles.confirmOrderButton}>Confirmar Pedido</button>
+                <button
+                    onClick={handleConfirmOrder}
+                    className={styles.confirmOrderButton}
+                    disabled={isProcessingOrder}
+                    aria-busy={isProcessingOrder}
+                    aria-label="Botão para confirmar pedido"
+                >
+                    {isProcessingOrder ? 'Processando...' : 'Confirmar Pedido'}
+                </button>
             </div>
         </Layout>
     );

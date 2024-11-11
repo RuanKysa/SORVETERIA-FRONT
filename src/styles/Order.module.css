@@ -1,0 +1,104 @@
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+.title {
+    text-align: center;
+    color: #333;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.statusSection {
+    margin-bottom: 30px;
+}
+
+.statusTitle {
+    color: #007bff;
+    font-size: 1.4em;
+    margin-bottom: 20px;
+}
+
+.orderItem {
+    margin: 15px 0;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #fdfdfd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.orderDetails {
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+.orderDetails h3 {
+    font-size: 1.2em;
+    color: #333;
+    margin: 0 0 10px;
+}
+
+.orderDetails p {
+    font-size: 0.95em;
+    color: #666;
+    margin: 5px 0;
+}
+
+.orderActions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.buttonPrimary {
+    background-color: #007bff;
+}
+
+.buttonPrimary:hover {
+    background-color: #0056b3;
+}
+
+.buttonSecondary {
+    background-color: #dc3545;
+}
+
+.buttonSecondary:hover {
+    background-color: #c82333;
+}
+
+.button:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.li {
+    font-size: 0.95em;
+    color: #666;
+}

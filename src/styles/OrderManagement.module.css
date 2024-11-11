@@ -1,0 +1,28 @@
+.orderManagementContainer {
+    padding: 20px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.orderItem {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.itemsList {
+    margin-top: 10px;
+}
+
+.statusUpdate {
+    margin-top: 10px;
+}
+
+.item {
+    margin-left: 15px;
+}

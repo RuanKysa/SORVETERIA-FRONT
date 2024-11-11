@@ -2,7 +2,7 @@
 
 import ProductCRUD from '../components/ProductCRUD'
 import Layout from '@/layout/layout'
-
+import OrderManagement from '@/components/OrderManagement'
 export default function Admin() {
     return (
         <Layout>
@@ -11,6 +11,10 @@ export default function Admin() {
                 <section>
                     <ProductCRUD />
                 </section>
+                <section>
+                    <OrderManagement />
+                </section>
+
                
             </>
         </Layout>

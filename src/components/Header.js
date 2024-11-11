@@ -60,6 +60,7 @@ const Header = ({ setCart }) => {
                     <li><Link href="/catalogo" className={styles.navLink}><FontAwesomeIcon icon={faBook} /> Catálogo</Link></li>
                     <li><Link href="/carrinho" className={styles.navLink}><FontAwesomeIcon icon={faShoppingCart} /> Carrinho</Link></li>
                     <li><Link href="/admin" className={styles.navLink}><FontAwesomeIcon icon={faPencilAlt} /> Área Admin</Link></li>
+                    <li><Link href="/minhascompras" className={styles.navLink}><FontAwesomeIcon icon={faPencilAlt} /> Minhas Compras</Link></li>
 
                     {userEmail ? (
                         <li className={styles.profileLink} onClick={toggleProfileMenu}>
