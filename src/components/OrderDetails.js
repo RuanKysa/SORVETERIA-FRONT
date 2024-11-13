@@ -5,8 +5,7 @@ import styles from '../styles/OrderManagement.module.css';
 export default function OrderManagement() {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [updatingStatus, setUpdatingStatus] = useState(false);
-    const [showOrders, setShowOrders] = useState(false); // Estado para controlar visibilidade dos pedidos
+    const [showOrders, setShowOrders] = useState(false); 
 
     useEffect(() => {
         fetchOrders();
@@ -24,48 +23,14 @@ export default function OrderManagement() {
         }
     };
 
-    const updateOrderStatus = async (orderId, newStatus) => {
-        setUpdatingStatus(true);
-        try {
-            await axios.put(`http://localhost:5000/api/orders/${orderId}`, { status: newStatus });
-            setOrders(prevOrders =>
-                prevOrders.map(order =>
-                    order._id === orderId ? { ...order, status: newStatus } : order
-                )
-            );
-            alert("Status atualizado com sucesso.");
-        } catch (error) {
-            console.error("Erro ao atualizar status do pedido:", error);
-            alert("Erro ao atualizar status. Tente novamente.");
-        } finally {
-            setUpdatingStatus(false);
-        }
-    };
-
-    const getStatusClass = (status) => {
-        switch (status) {
-            case "Pendente":
-                return styles.statusPendente;
-            case "Processando":
-                return styles.statusProcessando;
-            case "Enviado":
-                return styles.statusEnviado;
-            case "Concluído":
-                return styles.statusConcluido;
-            default:
-                return '';
-        }
-    };
-
     const toggleOrdersVisibility = () => {
-        setShowOrders(!showOrders); // Alterna a visibilidade dos pedidos
+        setShowOrders(!showOrders); 
     };
 
     return (
         <div className={styles.orderManagementContainer}>
-            <h1 className={styles.title}>Gerenciamento de Pedidos</h1>
+            <h1 className={styles.title}>Meus Pedidos</h1>
             
-            {/* Botão para mostrar/esconder pedidos */}
             <button className={styles.toggleButton} onClick={toggleOrdersVisibility}>
                 {showOrders ? 'Esconder Pedidos' : 'Mostrar Pedidos'}
             </button>

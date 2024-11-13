@@ -1,13 +1,14 @@
 "use client";
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import styles from '../styles/Auth.module.css';
 import { useRouter } from 'next/router';
 import Layout from '@/layout/layout';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Auth = () => {
-  const [formType, setFormType] = useState('login'); // Define o tipo do formulário (login ou registro)
+  const [formType, setFormType] = useState('login'); 
 
   // States para login
   const [email, setEmail] = useState('');
@@ -22,9 +23,34 @@ const Auth = () => {
 
   const router = useRouter();
 
+  const validateFields = () => {
+    if (formType === 'register') {
+      if (!name || !email || !password || !cpf || !phone) {
+        toast.error('Todos os campos são obrigatórios!');
+        return false;
+      }
+      if (!/^\d{11}$/.test(cpf)) {
+        toast.error('CPF deve ter 11 dígitos.');
+        return false;
+      }
+      if (!/^\d{10,11}$/.test(phone)) {
+        toast.error('Número de telefone inválido.');
+        return false;
+      }
+    } else {
+      if (!email || !password) {
+        toast.error('Email e senha são obrigatórios!');
+        return false;
+      }
+    }
+    return true;
+  };
+
   // Função para login
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+    if (!validateFields()) return;
+
     setLoading(true);
     setError(null);
 
@@ -34,24 +60,25 @@ const Auth = () => {
         password,
       });
 
-      // Armazena o token e o papel do usuário no localStorage
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userEmail', email);
-      localStorage.setItem('userRole', response.data.role); // Armazena o papel do usuário
+      localStorage.setItem('userRole', response.data.role);
 
-      console.log('Login bem-sucedido:', response.data);
-      router.push('/catalogo'); 
+      router.push('/catalogo');
     } catch (error) {
       console.error('Erro ao fazer login:', error);
       setError('Erro ao fazer login. Verifique suas credenciais.');
+      toast.error('Erro ao fazer login. Verifique suas credenciais.');
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   // Função para registro
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
+    if (!validateFields()) return;
+
     setLoading(true);
     setError(null);
 
@@ -64,11 +91,15 @@ const Auth = () => {
         phone,
       });
 
-      console.log('Registro bem-sucedido:', response.data);
-      router.push('/login');
+      // Exibe o toast de sucesso
+      toast.success('Registro bem-sucedido! Redirecionando para o login...', {
+        onClose: () => router.push('/login'),
+        autoClose: 3000, // Redireciona após 3 segundos
+      });
     } catch (error) {
       console.error('Erro ao registrar:', error);
       setError('Erro ao registrar. Tente novamente.');
+      toast.error('Erro ao registrar. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -76,6 +107,7 @@ const Auth = () => {
 
   return (
     <Layout>
+      <ToastContainer />
       <div className={styles.container}>
         <h1 className={styles.title}>{formType === 'login' ? 'Login' : 'Registrar'}</h1>
 

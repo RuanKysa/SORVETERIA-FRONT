@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from '@/styles/ProductCRUD.module.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-
+import { toast } from 'react-toastify'; // Importando o toast
+import 'react-toastify/dist/ReactToastify.css'; // Importando os estilos do toastify
 
 const ProductCRUD = () => {
     const [products, setProducts] = useState([]);
@@ -29,6 +30,7 @@ const ProductCRUD = () => {
             setProducts(response.data);
         } catch (err) {
             setError('Erro ao buscar produtos.');
+            toast.error('Erro ao buscar produtos.'); // Exibe erro
         } finally {
             setLoading(false);
         }
@@ -59,15 +61,18 @@ const ProductCRUD = () => {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
                 fetchProducts();
+                toast.success('Produto editado com sucesso!'); // Sucesso na edição
             } else {
                 const response = await axios.post('http://localhost:5000/api/products', data, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
                 setProducts([...products, response.data]);
+                toast.success('Produto adicionado com sucesso!'); // Sucesso na adição
             }
             resetForm();
         } catch (err) {
             setError('Erro ao salvar produto.');
+            toast.error('Erro ao salvar produto.'); // Erro ao salvar
         }
     };
 
@@ -88,8 +93,10 @@ const ProductCRUD = () => {
             try {
                 await axios.delete(`http://localhost:5000/api/products/${id}`);
                 setProducts(products.filter(product => product._id !== id));
+                toast.success('Produto excluído com sucesso!'); // Sucesso na exclusão
             } catch (err) {
                 setError('Erro ao deletar produto.');
+                toast.error('Erro ao deletar produto.'); // Erro na exclusão
             }
         }
     };

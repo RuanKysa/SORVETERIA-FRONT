@@ -7,16 +7,16 @@ const ThankYou = () => {
     const router = useRouter();
 
     const handleHomeRedirect = () => {
-        router.push('/');  // Usando o Next.js para navegação
+        router.push('/'); 
     };
 
     return (
         <Layout>
             <div className={styles.thankYouContainer}>
                 <div className={styles.messageBox}>
-                    <h1 className={styles.title}>Pagamento Realizado com Sucesso!</h1>
+                    <h1 className={styles.title}>Pedido Realizado com Sucesso!</h1>
                     <p className={styles.message}>
-                        Obrigado por sua compra! Seu pedido está sendo processado e será enviado em breve.
+                        Muito obrigado! Seu pedido foi realizado com sucesso. Em breve, um dos nossos colaboradores entrará em contato para negociar o pagamento.
                     </p>
                     <button className={styles.homeButton} onClick={handleHomeRedirect}>
                         Voltar para a página inicial

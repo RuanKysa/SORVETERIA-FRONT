@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import Layout from "@/layout/layout";
 import styles from '../styles/Checkout.module.css';
+import { ToastContainer, toast } from 'react-toastify'; // Importando Toastify
+import 'react-toastify/dist/ReactToastify.css'; // Estilos do Toastify
 
 export default function Checkout() {
     const [cart, setCart] = useState(null);
@@ -33,7 +35,7 @@ export default function Checkout() {
             setCart(response.data);
         } catch (error) {
             console.error("Erro ao carregar o carrinho:", error);
-            alert("Não foi possível carregar o carrinho. Por favor, tente novamente.");
+            toast.error("Não foi possível carregar o carrinho. Por favor, tente novamente."); // Exibe a notificação de erro
         } finally {
             setLoading(false);
         }
@@ -54,7 +56,7 @@ export default function Checkout() {
             });
         } catch (error) {
             console.error("Erro ao carregar os dados do usuário:", error);
-            alert("Não foi possível carregar os dados do usuário. Verifique sua conexão e tente novamente.");
+            toast.error("Não foi possível carregar os dados do usuário. Verifique sua conexão e tente novamente."); // Exibe a notificação de erro
         }
     };
 
@@ -72,29 +74,29 @@ export default function Checkout() {
                         postalCode: sanitizedCEP,
                     }));
                 } else {
-                    alert("CEP não encontrado.");
+                    toast.warning("CEP não encontrado."); // Notificação de aviso
                 }
             } catch (error) {
                 console.error("Erro ao buscar o endereço pelo CEP:", error);
-                alert("Erro ao buscar o endereço. Verifique o CEP e tente novamente.");
+                toast.error("Erro ao buscar o endereço. Verifique o CEP e tente novamente."); // Notificação de erro
             }
         }
     };
 
     const handleConfirmOrder = async () => {
         if (!userEmail) {
-            alert("Erro: Usuário não identificado.");
+            toast.error("Erro: Usuário não identificado.");
             return;
         }
     
         if (!cart || cart.items.length === 0) {
-            alert("O carrinho está vazio!");
+            toast.warning("O carrinho está vazio!"); // Notificação de aviso
             return;
         }
     
         const { street, number, city, state, postalCode } = address;
         if (!street || !number || !city || !state || !postalCode) {
-            alert("Por favor, preencha todos os campos de endereço.");
+            toast.warning("Por favor, preencha todos os campos de endereço.");
             return;
         }
     
@@ -117,12 +119,12 @@ export default function Checkout() {
             console.log("Resposta ao limpar o carrinho:", clearCartResponse.data);
     
             localStorage.removeItem('cart');
-            alert("Pedido confirmado com sucesso!");
+            toast.success("Pedido confirmado com sucesso!"); // Notificação de sucesso
     
             router.push('/thankyou');
         } catch (error) {
             console.error("Erro ao confirmar o pedido:", error);
-            alert("Erro ao confirmar o pedido. Tente novamente.");
+            toast.error("Erro ao confirmar o pedido. Tente novamente."); // Notificação de erro
         } finally {
             setIsProcessingOrder(false);
         }
@@ -216,6 +218,8 @@ export default function Checkout() {
                     {isProcessingOrder ? 'Processando...' : 'Confirmar Pedido'}
                 </button>
             </div>
+
+            <ToastContainer position="top-center" autoClose={3000} /> {/* Componente ToastContainer */}
         </Layout>
     );
 }

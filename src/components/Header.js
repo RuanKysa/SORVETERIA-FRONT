@@ -59,7 +59,12 @@ const Header = ({ setCart }) => {
                     <li><Link href="/" className={styles.navLink}><FontAwesomeIcon icon={faHome} /> Home</Link></li>
                     <li><Link href="/catalogo" className={styles.navLink}><FontAwesomeIcon icon={faBook} /> Catálogo</Link></li>
                     <li><Link href="/carrinho" className={styles.navLink}><FontAwesomeIcon icon={faShoppingCart} /> Carrinho</Link></li>
-                    <li><Link href="/admin" className={styles.navLink}><FontAwesomeIcon icon={faPencilAlt} /> Área Admin</Link></li>
+
+                    {/* Exibe a Área Admin apenas se o email do usuário for "adm@gmail.com" */}
+                    {userEmail === 'adm@gmail.com' && (
+                        <li><Link href="/admin" className={styles.navLink}><FontAwesomeIcon icon={faPencilAlt} /> Área Admin</Link></li>
+                    )}
+
                     <li><Link href="/minhascompras" className={styles.navLink}><FontAwesomeIcon icon={faPencilAlt} /> Minhas Compras</Link></li>
 
                     {userEmail ? (

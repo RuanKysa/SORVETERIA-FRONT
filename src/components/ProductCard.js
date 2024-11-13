@@ -3,8 +3,9 @@ import axios from 'axios';
 import styles from "../styles/ProductCart.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingBag, faEye, faCartPlus } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-// Definindo a lista de categorias
 const categories = [
     "PICOLES DE FRUTA",
     "PICOLES DE CREME",
@@ -12,7 +13,6 @@ const categories = [
     "Todos"
 ];
 
-// Configuração global do Axios para evitar repetição da URL base
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:5000/api'
 });
@@ -23,16 +23,15 @@ const ProductCatalog = () => {
     const [error, setError] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("Todos");
     const [modalProduct, setModalProduct] = useState(null);
-    const [quantity, setQuantity] = useState(1); // Estado para quantidade
-    const [message, setMessage] = useState("");
+    const [quantity, setQuantity] = useState(1);
 
-    // Fetch de produtos
     const fetchProducts = useCallback(async () => {
         try {
             const response = await axiosInstance.get('/products');
             setProducts(response.data);
         } catch (err) {
             setError('Erro ao carregar produtos.');
+            toast.error('Erro ao carregar produtos.');
         } finally {
             setLoading(false);
         }
@@ -44,7 +43,7 @@ const ProductCatalog = () => {
 
     const openModal = useCallback((product) => {
         setModalProduct(product);
-        setQuantity(1); // Resetar a quantidade quando abrir o modal
+        setQuantity(1);
     }, []);
 
     const closeModal = useCallback(() => {
@@ -53,26 +52,25 @@ const ProductCatalog = () => {
 
     const addToCart = useCallback(async (product) => {
         const userEmail = localStorage.getItem('userEmail');
-    
+
+        // Verificação se o usuário está logado
         if (!userEmail) {
-            setMessage("Por favor, faça login para adicionar itens ao carrinho.");
-            return;
+            toast.warning("Por favor, faça login para adicionar itens ao carrinho.");
+            return; // Interrompe a função caso o usuário não esteja logado
         }
-    
+
         try {
+            // Apenas adiciona ao carrinho se o usuário estiver logado
             await axiosInstance.post('/cart/add', {
                 userEmail: userEmail,
                 productId: product._id,
                 quantity: quantity,
             });
-    
-            setMessage("Produto adicionado ao carrinho com sucesso!");
-            setTimeout(() => setMessage(""), 3000);
-    
-            // Fechar o modal após adicionar ao carrinho
+
+            toast.success("Produto adicionado ao carrinho com sucesso!");
             closeModal();
         } catch (error) {
-            setMessage("Erro ao adicionar produto ao carrinho.");
+            toast.error("Erro ao adicionar produto ao carrinho.");
             console.error(error);
         }
     }, [quantity, closeModal]);
@@ -88,7 +86,7 @@ const ProductCatalog = () => {
         <div className={styles.container}>
             <h1 className={styles.title}>Catálogo de Produtos</h1>
 
-            {message && <div className={styles.message}>{message}</div>}
+            <ToastContainer position="top-center" autoClose={3000} />
 
             <nav className={styles.buttonGroup}>
                 {categories.map(category => (
@@ -113,12 +111,12 @@ const ProductCatalog = () => {
                             />
                             <div className={styles.iconOverlay}>
                                 <button className={styles.iconButton} onClick={() => addToCart(product)}>
-                                    <FontAwesomeIcon icon={faCartPlus} /> {/* Ícone do carrinho */}
+                                    <FontAwesomeIcon icon={faCartPlus} />
                                 </button>
                                 <button
                                     className={styles.iconButton}
                                     onClick={() => openModal(product)} >
-                                    <FontAwesomeIcon icon={faEye} /> {/* Ícone de visualização */}
+                                    <FontAwesomeIcon icon={faEye} />
                                 </button>
                             </div>
                         </div>
