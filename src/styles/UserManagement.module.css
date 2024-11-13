@@ -1,0 +1,130 @@
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  text-align: center;
+  color: #333;
+  font-size: 1.8em;
+  margin-bottom: 20px;
+}
+
+.addButton {
+  cursor: pointer;
+  color: #007bff;
+  font-size: 18px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.input, .textarea, .select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #333;
+  background-color: #f7f7f7;
+  transition: border-color 0.2s;
+}
+
+.input:focus, .textarea:focus {
+  border-color: #28a745;
+  outline: none;
+}
+
+.button, .buttonn {
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #28a745;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.button:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+.categoryButtons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.li {
+  margin: 15px 0;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #fdfdfd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.productInfo {
+  flex-grow: 1;
+  margin-right: 20px;
+}
+
+.productInfo h3 {
+  font-size: 1.2em;
+  color: #333;
+  margin: 0 0 10px;
+}
+
+.productInfo p {
+  font-size: 0.95em;
+  color: #666;
+  margin: 5px 0;
+}
+
+.productInfo img {
+  max-width: 80px;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.productActions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.productActions .button {
+  background-color: #007bff;
+  font-size: 14px;
+}
+
+.productActions .button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.categoryButtons .buttonn:last-child {
+  background-color: #dc3545;
+}

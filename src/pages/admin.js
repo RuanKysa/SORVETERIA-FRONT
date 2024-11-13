@@ -3,6 +3,7 @@
 import ProductCRUD from '../components/ProductCRUD'
 import Layout from '@/layout/layout'
 import OrderManagement from '@/components/OrderManagement'
+import UserManagement from '@/components/UserManagement'
 export default function Admin() {
     return (
         <Layout>
@@ -13,6 +14,9 @@ export default function Admin() {
                 </section>
                 <section>
                     <OrderManagement />
+                </section>
+                <section>
+                    <UserManagement />
                 </section>
 
                
