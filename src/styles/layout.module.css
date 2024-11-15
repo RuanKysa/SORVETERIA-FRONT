@@ -2,7 +2,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* A altura mínima vai ser a altura total da tela */
+  min-height: 100vh; 
   background: linear-gradient(135deg, #0a9ef3, #fa9bca);
 }
 

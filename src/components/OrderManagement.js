@@ -42,6 +42,10 @@ export default function OrderManagement() {
         }
     };
 
+    const calculateTotalPrice = (items) => {
+        return items.reduce((total, item) => total + item.quantity * item.productId.price, 0).toFixed(2);
+    };
+
     const getStatusClass = (status) => {
         switch (status) {
             case "Pendente":
@@ -84,10 +88,17 @@ export default function OrderManagement() {
                             <h3>Itens do Pedido:</h3>
                             {order.items.map(item => (
                                 <div key={item.productId._id} className={styles.item}>
-                                    <p>{item.productId.name} - Quantidade: {item.quantity}</p>
+                                    <p>
+                                        {item.productId.name} - 
+                                        Quantidade: {item.quantity} - 
+                                        Preço Unitário: R${item.productId.price.toFixed(2)}
+                                    </p>
                                 </div>
                             ))}
                         </div>
+                        <p className={styles.totalPrice}>
+                            <strong>Preço Total:</strong> R${calculateTotalPrice(order.items)}
+                        </p>
                         <div className={styles.statusUpdate}>
                             <label htmlFor={`status-${order._id}`}>Atualizar Status:</label>
                             <select

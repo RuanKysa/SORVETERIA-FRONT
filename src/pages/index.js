@@ -1,15 +1,80 @@
-"use client"
-
+import { useEffect, useState } from 'react';
 import Layout from "@/layout/layout";
-import Email from "@/components/email"
+import Email from "@/components/email";
 import Benefits from "@/components/Benefits";
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
+  const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchWeather() {
+      try {
+        const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=63fcf2d4d04947ffb3a181932241311&q=Laranjeiras%20do%20Sul&lang=pt&days=7`);
+        const data = await response.json();
+        setWeather(data);
+      } catch (error) {
+        console.error("Erro ao buscar o clima:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchWeather();
+  }, []);
+
   return (
     <Layout>
       <div className={styles.homePage}>
-        
+
+      <section className={styles.weatherForecast}>
+  {loading ? (
+    <p className={styles.loading}>Carregando clima...</p>
+  ) : weather ? (
+    <div className={styles.weatherContainer}>
+      {/* Mensagem personalizada */}
+      <p className={styles.greetingMessage}>Ótimo dia para fazer seu pedido de sorvetes!</p>
+
+      <div className={styles.currentWeather}>
+        <h2 className={styles.cityName}>{weather.location.name}</h2> {/* Nome da cidade */}
+        <div className={styles.tempInfo}>
+          <span className={styles.temp}>{weather.current.temp_c}°C</span>
+          <p className={styles.condition}>{weather.current.condition.text}</p>
+          <div className={styles.weatherDetails}>
+            <p>Umidade: {weather.current.humidity}%</p>
+            <p>Vento: {weather.current.wind_kph} km/h</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Previsão para os próximos dias */}
+      <div className={styles.weekForecast}>
+        {weather.forecast.forecastday.map((day, index) => (
+          <div key={index} className={styles.dailyForecast}>
+            <p className={styles.dayOfWeek}>
+              {new Date(day.date).toLocaleDateString("pt-BR", { weekday: "short" })}
+            </p>
+            <img
+              src={day.day.condition.icon}
+              alt={day.day.condition.text}
+              className={styles.icon}
+            />
+            <p className={styles.tempRange}>
+              {day.day.maxtemp_c}° / {day.day.mintemp_c}°
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <p>Não foi possível carregar o clima.</p>
+  )}
+</section>
+
+
+
+
         {/* Seção sobre o sistema de revenda */}
         <section className={styles.resaleSystem}>
           <h2>Sistema de Revenda de Sorvetes</h2>
@@ -20,7 +85,7 @@ export default function Home() {
         {/* Seção com mapa e informações de contato */}
         <section className={styles.contactInfo}>
           <div className={styles.contactColumns}>
-            
+
             {/* Coluna do mapa */}
             <div className={styles.mapColumn}>
               <iframe
@@ -38,15 +103,15 @@ export default function Home() {
             <div className={styles.infoColumn}>
               <h3>Localização e Contato</h3>
               <p>Endereço: <a href="https://maps.app.goo.gl/cCe7vVr4Bs1nSqMV9" target="_blank" rel="noopener noreferrer">
-              Rua Doutor Carmosino Vieira Branco, 
-              123 - Bairro Cristo Rei, 
-              Laranjeiras do Sul, PR</a>
+                Rua Doutor Carmosino Vieira Branco,
+                123 - Bairro Cristo Rei,
+                Laranjeiras do Sul, PR</a>
               </p>
               <p>Telefone: (42) 99932-1125</p>
               <p>Email: contato@sorvetesqdelicia.com.br</p>
               <p>Horário de Atendimento: Segunda a Sexta, das 9h às 18h</p>
             </div>
-            
+
           </div>
         </section>
 
@@ -54,5 +119,5 @@ export default function Home() {
       <Benefits />
       <Email />
     </Layout>
-  )
+  );
 }

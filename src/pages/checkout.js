@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import Layout from "@/layout/layout";
 import styles from '../styles/Checkout.module.css';
-import { ToastContainer, toast } from 'react-toastify'; // Importando Toastify
-import 'react-toastify/dist/ReactToastify.css'; // Estilos do Toastify
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 export default function Checkout() {
     const [cart, setCart] = useState(null);
@@ -35,7 +35,7 @@ export default function Checkout() {
             setCart(response.data);
         } catch (error) {
             console.error("Erro ao carregar o carrinho:", error);
-            toast.error("Não foi possível carregar o carrinho. Por favor, tente novamente."); // Exibe a notificação de erro
+            toast.error("Não foi possível carregar o carrinho. Por favor, tente novamente."); 
         } finally {
             setLoading(false);
         }
@@ -56,12 +56,12 @@ export default function Checkout() {
             });
         } catch (error) {
             console.error("Erro ao carregar os dados do usuário:", error);
-            toast.error("Não foi possível carregar os dados do usuário. Verifique sua conexão e tente novamente."); // Exibe a notificação de erro
+            toast.error("Não foi possível carregar os dados do usuário. Verifique sua conexão e tente novamente."); 
         }
     };
 
     const fetchAddressByCEP = async () => {
-        const sanitizedCEP = address.cep.replace(/\D/g, ''); // Remove caracteres não numéricos
+        const sanitizedCEP = address.cep.replace(/\D/g, ''); 
         if (/^\d{8}$/.test(sanitizedCEP)) {
             try {
                 const response = await axios.get(`https://viacep.com.br/ws/${sanitizedCEP}/json/`);
@@ -74,11 +74,11 @@ export default function Checkout() {
                         postalCode: sanitizedCEP,
                     }));
                 } else {
-                    toast.warning("CEP não encontrado."); // Notificação de aviso
+                    toast.warning("CEP não encontrado.");
                 }
             } catch (error) {
                 console.error("Erro ao buscar o endereço pelo CEP:", error);
-                toast.error("Erro ao buscar o endereço. Verifique o CEP e tente novamente."); // Notificação de erro
+                toast.error("Erro ao buscar o endereço. Verifique o CEP e tente novamente."); 
             }
         }
     };
@@ -90,7 +90,7 @@ export default function Checkout() {
         }
     
         if (!cart || cart.items.length === 0) {
-            toast.warning("O carrinho está vazio!"); // Notificação de aviso
+            toast.warning("O carrinho está vazio!"); 
             return;
         }
     
@@ -119,12 +119,12 @@ export default function Checkout() {
             console.log("Resposta ao limpar o carrinho:", clearCartResponse.data);
     
             localStorage.removeItem('cart');
-            toast.success("Pedido confirmado com sucesso!"); // Notificação de sucesso
+            toast.success("Pedido confirmado com sucesso!"); 
     
             router.push('/thankyou');
         } catch (error) {
             console.error("Erro ao confirmar o pedido:", error);
-            toast.error("Erro ao confirmar o pedido. Tente novamente."); // Notificação de erro
+            toast.error("Erro ao confirmar o pedido. Tente novamente."); 
         } finally {
             setIsProcessingOrder(false);
         }
@@ -219,7 +219,7 @@ export default function Checkout() {
                 </button>
             </div>
 
-            <ToastContainer position="top-center" autoClose={3000} /> {/* Componente ToastContainer */}
+            <ToastContainer position="top-center" autoClose={3000} /> 
         </Layout>
     );
 }
