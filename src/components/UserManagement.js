@@ -11,11 +11,12 @@ const UserManagement = () => {
     cpf: '',
     phone: ''
   });
-  const [editUser, setEditUser] = useState(null); // Estado para edição de usuário
+  const [editUser, setEditUser] = useState(null);
+  const [viewUser, setViewUser] = useState(null); 
   const [showUsers, setShowUsers] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [searchEmail, setSearchEmail] = useState('');
 
-  // Função para capturar os usuários do backend
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -28,7 +29,6 @@ const UserManagement = () => {
     }
   };
 
-  // Função para criar um novo usuário
   const handleCreateUser = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -51,9 +51,13 @@ const UserManagement = () => {
     }
   };
 
-  // Função para editar um usuário
   const handleEditUser = (user) => {
-    setEditUser(user); // Preenche o estado com os dados do usuário para edição
+    setEditUser(user);
+    setViewUser(null); 
+  };
+
+  const handleViewUser = (user) => {
+    setViewUser(user); 
   };
 
   const handleUpdateUser = async (e) => {
@@ -63,7 +67,7 @@ const UserManagement = () => {
       await axios.put(`http://localhost:5000/api/users/users/${editUser._id}`, editUser);
       alert('Usuário atualizado com sucesso!');
       setEditUser(null);
-      fetchUsers(); 
+      fetchUsers();
     } catch (error) {
       console.error('Erro ao atualizar usuário:', error);
       alert('Erro ao atualizar usuário.');
@@ -72,13 +76,10 @@ const UserManagement = () => {
     }
   };
 
-
-  // Alternar a exibição da lista de usuários
   const toggleUserList = () => {
     setShowUsers(!showUsers);
   };
 
-  // Lidar com a mudança de inputs do formulário
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewUser((prevUser) => ({
@@ -95,7 +96,18 @@ const UserManagement = () => {
     }));
   };
 
-  // Carregar usuários ao montar o componente
+  const handleSearchEmail = (e) => {
+    setSearchEmail(e.target.value);
+  };
+
+  const filteredUsers = users.filter(user =>
+    user.email.toLowerCase().includes(searchEmail.toLowerCase())
+  );
+
+  const closeModal = () => {
+    setViewUser(null); 
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -104,59 +116,17 @@ const UserManagement = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>Gestão de Usuários</h1>
 
-      {/* Formulário para criação de usuário */}
-      <form onSubmit={handleCreateUser} className={styles.form}>
-        <input
-          type="text"
-          name="name"
-          value={newUser.name}
-          onChange={handleChange}
-          placeholder="Nome"
-          className={styles.input}
-          required
-        />
+      <div className={styles.searchContainer}>
         <input
           type="email"
-          name="email"
-          value={newUser.email}
-          onChange={handleChange}
-          placeholder="Email"
+          value={searchEmail}
+          onChange={handleSearchEmail}
+          placeholder="Pesquisar por email"
           className={styles.input}
-          required
         />
-        <input
-          type="password"
-          name="password"
-          value={newUser.password}
-          onChange={handleChange}
-          placeholder="Senha"
-          className={styles.input}
-          required
-        />
-        <input
-          type="text"
-          name="cpf"
-          value={newUser.cpf}
-          onChange={handleChange}
-          placeholder="CPF"
-          className={styles.input}
-          required
-        />
-        <input
-          type="text"
-          name="phone"
-          value={newUser.phone}
-          onChange={handleChange}
-          placeholder="Telefone"
-          className={styles.input}
-          required
-        />
-        <button type="submit" className={styles.button} disabled={loading}>
-          {loading ? 'Criando usuário...' : 'Criar Usuário'}
-        </button>
-      </form>
+      </div>
 
-      {/* Formulário de edição de usuário */}
+
       {editUser && (
         <form onSubmit={handleUpdateUser} className={styles.form}>
           <input
@@ -210,18 +180,30 @@ const UserManagement = () => {
         </form>
       )}
 
-      {/* Botão para alternar a exibição da lista de usuários */}
+      {viewUser && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <span className={styles.close} onClick={closeModal}>×</span>
+            <h2>Detalhes do Usuário</h2>
+            <p><strong>Nome:</strong> {viewUser.name}</p>
+            <p><strong>Email:</strong> {viewUser.email}</p>
+            <p><strong>Telefone:</strong> {viewUser.phone}</p>
+            <p><strong>CPF:</strong> {viewUser.cpf}</p>
+            <p><strong>Data de criação:</strong> {new Date(viewUser.createdAt).toLocaleDateString()}</p>
+          </div>
+        </div>
+      )}
+
       <button onClick={toggleUserList} className={styles.addButton}>
         {showUsers ? 'Ocultar usuários' : 'Mostrar usuários'}
       </button>
 
-      {/* Exibir lista de usuários com carregamento */}
       {loading ? (
         <p>Carregando usuários...</p>
       ) : (
         showUsers && (
           <ul className={styles.ul}>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <li key={user._id} className={styles.li}>
                 <div className={styles.productInfo}>
                   <h3>{user.name}</h3>
@@ -229,6 +211,9 @@ const UserManagement = () => {
                   <p>{user.phone}</p>
                 </div>
                 <div className={styles.productActions}>
+                  <button onClick={() => handleViewUser(user)} className={styles.button}>
+                    Visualizar
+                  </button>
                   <button onClick={() => handleEditUser(user)} className={styles.button}>
                     Editar
                   </button>

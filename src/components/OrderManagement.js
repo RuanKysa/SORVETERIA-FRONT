@@ -6,7 +6,7 @@ export default function OrderManagement() {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [updatingStatus, setUpdatingStatus] = useState(false);
-    const [showOrders, setShowOrders] = useState(false); // Estado para controlar visibilidade dos pedidos
+    const [showOrders, setShowOrders] = useState(false);
 
     useEffect(() => {
         fetchOrders();
@@ -62,14 +62,13 @@ export default function OrderManagement() {
     };
 
     const toggleOrdersVisibility = () => {
-        setShowOrders(!showOrders); // Alterna a visibilidade dos pedidos
+        setShowOrders(!showOrders); 
     };
 
     return (
         <div className={styles.orderManagementContainer}>
             <h1 className={styles.title}>Gerenciamento de Pedidos</h1>
             
-            {/* Botão para mostrar/esconder pedidos */}
             <button className={styles.toggleButton} onClick={toggleOrdersVisibility}>
                 {showOrders ? 'Esconder Pedidos' : 'Mostrar Pedidos'}
             </button>

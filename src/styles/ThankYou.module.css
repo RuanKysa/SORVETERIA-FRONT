@@ -1,4 +1,3 @@
-/* .thankYouContainer */
 .thankYouContainer {
     max-width: 600px;
     margin: 0 auto;
@@ -14,10 +13,9 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Centraliza na tela */
+    transform: translate(-50%, -50%);
 }
 
-/* .title */
 .title {
     font-size: 2rem;
     font-weight: bold;
@@ -25,7 +23,6 @@
     margin-bottom: 15px;
 }
 
-/* .message */
 .message {
     font-size: 1.125rem;
     color: #555;
@@ -33,7 +30,6 @@
     line-height: 1.5;
 }
 
-/* .homeButton */
 .homeButton {
     padding: 12px 25px;
     font-size: 1.125rem;
@@ -46,13 +42,11 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Hover effect */
 .homeButton:hover {
     background-color: #0056b3;
     transform: scale(1.05);
 }
 
-/* Media Queries para Responsividade */
 @media (max-width: 768px) {
     .thankYouContainer {
         padding: 15px;

@@ -53,14 +53,12 @@ const ProductCatalog = () => {
     const addToCart = useCallback(async (product) => {
         const userEmail = localStorage.getItem('userEmail');
 
-        // Verificação se o usuário está logado
         if (!userEmail) {
             toast.warning("Por favor, faça login para adicionar itens ao carrinho.");
-            return; // Interrompe a função caso o usuário não esteja logado
+            return; 
         }
 
         try {
-            // Apenas adiciona ao carrinho se o usuário estiver logado
             await axiosInstance.post('/cart/add', {
                 userEmail: userEmail,
                 productId: product._id,

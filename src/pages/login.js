@@ -10,13 +10,11 @@ import 'react-toastify/dist/ReactToastify.css';
 const Auth = () => {
   const [formType, setFormType] = useState('login'); 
 
-  // States para login
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // States para registro
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
   const [phone, setPhone] = useState('');
@@ -46,7 +44,7 @@ const Auth = () => {
     return true;
   };
 
-  // Função para login
+
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     if (!validateFields()) return;
@@ -74,7 +72,6 @@ const Auth = () => {
     }
   };
 
-  // Função para registro
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     if (!validateFields()) return;
@@ -91,10 +88,9 @@ const Auth = () => {
         phone,
       });
 
-      // Exibe o toast de sucesso
       toast.success('Registro bem-sucedido! Redirecionando para o login...', {
         onClose: () => router.push('/login'),
-        autoClose: 3000, // Redireciona após 3 segundos
+        autoClose: 3000, 
       });
     } catch (error) {
       console.error('Erro ao registrar:', error);

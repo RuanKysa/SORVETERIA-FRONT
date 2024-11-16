@@ -5,7 +5,6 @@ export default function Newsletter() {
     <section className={styles.newsletterSection}>
       <div className={styles.content}>
         <div className={styles.imageLeft}>
-          {/* <img src="" alt="" /> */}
         </div>
         <div className={styles.newsletter}>
           <h2>
@@ -30,7 +29,6 @@ export default function Newsletter() {
           </form>
         </div>
         <div className={styles.imageRight}>
-          {/* <img src="/" alt="" /> */}
         </div>
       </div>
     </section>
