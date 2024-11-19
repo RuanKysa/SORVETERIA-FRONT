@@ -6,7 +6,7 @@ export default function OrderManagement() {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [updatingStatus, setUpdatingStatus] = useState(false);
-    const [showOrders, setShowOrders] = useState(false); 
+    const [showOrders, setShowOrders] = useState(false);
 
     useEffect(() => {
         fetchOrders();
@@ -42,6 +42,10 @@ export default function OrderManagement() {
         }
     };
 
+    const calculateTotalPrice = (items) => {
+        return items.reduce((total, item) => total + item.quantity * item.productId.price, 0).toFixed(2);
+    };
+
     const getStatusClass = (status) => {
         switch (status) {
             case "Pendente":
@@ -63,9 +67,8 @@ export default function OrderManagement() {
 
     return (
         <div className={styles.orderManagementContainer}>
-            <h1 className={styles.title}>Meus Pedidos</h1>
+            <h1 className={styles.title}>Gerenciamento de Pedidos</h1>
             
-          
             <button className={styles.toggleButton} onClick={toggleOrdersVisibility}>
                 {showOrders ? 'Esconder Pedidos' : 'Mostrar Pedidos'}
             </button>
@@ -84,10 +87,17 @@ export default function OrderManagement() {
                             <h3>Itens do Pedido:</h3>
                             {order.items.map(item => (
                                 <div key={item.productId._id} className={styles.item}>
-                                    <p>{item.productId.name} - Quantidade: {item.quantity}</p>
+                                    <p>
+                                        {item.productId.name} - 
+                                        Quantidade: {item.quantity} - 
+                                        Preço Unitário: R${item.productId.price.toFixed(2)}
+                                    </p>
                                 </div>
                             ))}
                         </div>
+                        <p className={styles.totalPrice}>
+                            <strong>Preço Total:</strong> R${calculateTotalPrice(order.items)}
+                        </p>
                     </div>
                 ))
             )}

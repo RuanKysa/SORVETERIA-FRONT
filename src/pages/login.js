@@ -105,6 +105,10 @@ const Auth = () => {
     <Layout>
       <ToastContainer />
       <div className={styles.container}>
+      <div className={styles.messageBox}>
+          <h2>🔒 Acesso Restrito</h2>
+          <p>Faça login ou registre-se para continuar explorando nosso sistema.</p>
+        </div>
         <h1 className={styles.title}>{formType === 'login' ? 'Login' : 'Registrar'}</h1>
 
         <div className={styles.buttonGroup}>
