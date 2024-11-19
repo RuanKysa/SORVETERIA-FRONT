@@ -194,7 +194,7 @@ const UserManagement = () => {
         </div>
       )}
 
-      <button onClick={toggleUserList} className={styles.addButton}>
+      <button onClick={toggleUserList} className={styles.button}>
         {showUsers ? 'Ocultar usuários' : 'Mostrar usuários'}
       </button>
 
